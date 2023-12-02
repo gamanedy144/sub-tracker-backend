@@ -5,4 +5,8 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
 
     <include file="db/migration/scripts/202309171351_create_user_table.sql" relativeToChangelogFile="false"/>
+    <include file="db/migration/scripts/202310071749_create_user_sequence.sql" relativeToChangelogFile="false"/>
+    <include file="db/migration/scripts/202310071753_create_subscription_provider_table.sql" relativeToChangelogFile="false"/>
+    <include file="db/migration/scripts/202310071801_create_subscription_type_enum.sql" relativeToChangelogFile="false"/>
+    <include file="db/migration/scripts/202310071810_create_subscription_table.sql" relativeToChangelogFile="false"/>
 </databaseChangeLog>
