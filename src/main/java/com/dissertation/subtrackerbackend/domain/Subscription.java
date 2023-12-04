@@ -1,9 +1,13 @@
 package com.dissertation.subtrackerbackend.domain;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(schema = "sub_tracker", name = "subscription")
 public class Subscription {

@@ -2,10 +2,11 @@ package com.dissertation.subtrackerbackend.domain.mapper;
 
 import com.dissertation.subtrackerbackend.domain.Subscription;
 import com.dissertation.subtrackerbackend.domain.dto.SubscriptionDTO;
-import org.mapstruct.BeanMapping;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.*;
 
+@Mapper(
+        componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR
+)
 public abstract class SubscriptionMapper implements BaseMapper<Subscription, SubscriptionDTO> {
 
     @Override

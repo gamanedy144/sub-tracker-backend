@@ -3,6 +3,7 @@ package com.dissertation.subtrackerbackend.web.rest;
 import com.dissertation.subtrackerbackend.domain.User;
 import com.dissertation.subtrackerbackend.domain.dto.UserDTO;
 import com.dissertation.subtrackerbackend.service.UserService;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Data
+@AllArgsConstructor
 @RestController
 @RequestMapping("api/v1/user")
 public class UserController {

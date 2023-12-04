@@ -5,10 +5,12 @@ import com.dissertation.subtrackerbackend.domain.dto.SubscriptionDTO;
 import com.dissertation.subtrackerbackend.domain.mapper.SubscriptionMapper;
 import com.dissertation.subtrackerbackend.repository.SubscriptionRepository;
 import com.dissertation.subtrackerbackend.service.SubscriptionService;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@AllArgsConstructor
 @Service
 public class SubscriptionServiceImpl implements SubscriptionService {
     SubscriptionRepository subscriptionRepository;

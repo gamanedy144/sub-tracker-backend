@@ -17,4 +17,6 @@ public interface SubscriptionProviderService {
     SubscriptionProvider updateSubscriptionProvider(SubscriptionProviderDTO subscriptionProviderDTO);
 
     void delete(long id);
+
+    SubscriptionProvider updateSubscriptionProviderById(long id, SubscriptionProviderDTO subscriptionProviderDTO);
 }

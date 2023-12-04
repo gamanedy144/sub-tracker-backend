@@ -5,10 +5,11 @@ import com.dissertation.subtrackerbackend.domain.dto.UserDTO;
 import com.dissertation.subtrackerbackend.domain.mapper.UserMapper;
 import com.dissertation.subtrackerbackend.repository.UserRepository;
 import com.dissertation.subtrackerbackend.service.UserService;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+@AllArgsConstructor
 @Service
 public class UserServiceImpl implements UserService {
     UserRepository userRepository;

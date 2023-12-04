@@ -5,10 +5,14 @@ import com.dissertation.subtrackerbackend.domain.dto.SubscriptionProviderDTO;
 import com.dissertation.subtrackerbackend.domain.mapper.SubscriptionProviderMapper;
 import com.dissertation.subtrackerbackend.repository.SubscriptionProviderRepository;
 import com.dissertation.subtrackerbackend.service.SubscriptionProviderService;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@AllArgsConstructor
 @Service
 public class SubscriptionProviderServiceImpl implements SubscriptionProviderService {
 
@@ -45,5 +49,12 @@ public class SubscriptionProviderServiceImpl implements SubscriptionProviderServ
     public void delete(long id) {
         SubscriptionProvider temp = subscriptionProviderRepository.findById(id).orElseThrow();
         subscriptionProviderRepository.deleteById(id);
+    }
+
+    @Override
+    public SubscriptionProvider updateSubscriptionProviderById(long id, SubscriptionProviderDTO subscriptionProviderDTO) {
+        SubscriptionProvider subscriptionProviderToBeSaved = subscriptionProviderRepository.findById(id).orElseThrow();
+        mapper.updateSubscriptionProviderFromDto(subscriptionProviderToBeSaved, subscriptionProviderDTO);
+        return subscriptionProviderRepository.save(subscriptionProviderToBeSaved);
     }
 }

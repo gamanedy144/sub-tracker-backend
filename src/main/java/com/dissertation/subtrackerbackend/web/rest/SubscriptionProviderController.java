@@ -3,13 +3,16 @@ package com.dissertation.subtrackerbackend.web.rest;
 import com.dissertation.subtrackerbackend.domain.SubscriptionProvider;
 import com.dissertation.subtrackerbackend.domain.dto.SubscriptionProviderDTO;
 import com.dissertation.subtrackerbackend.service.SubscriptionProviderService;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Data
+@AllArgsConstructor
 @RestController
 @RequestMapping("api/v1/subscription-provider")
 public class SubscriptionProviderController {
@@ -34,6 +37,10 @@ public class SubscriptionProviderController {
     @PutMapping("/update")
     public ResponseEntity<SubscriptionProvider> updateSubscriptionProvider(@RequestBody SubscriptionProviderDTO subscriptionProviderDTO){
         return ResponseEntity.ok(subscriptionProviderService.updateSubscriptionProvider(subscriptionProviderDTO));
+    }
+    @PutMapping("/update/{id}")
+    public ResponseEntity<SubscriptionProvider> updateSubscriptionProviderById(@PathVariable long id, @RequestBody SubscriptionProviderDTO subscriptionProviderDTO){
+        return ResponseEntity.ok(subscriptionProviderService.updateSubscriptionProviderById(id, subscriptionProviderDTO));
     }
     @DeleteMapping("/delete/{id}")
     public void deleteSubscriptionProvider(@PathVariable long id){

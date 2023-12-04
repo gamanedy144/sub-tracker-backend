@@ -3,6 +3,7 @@ package com.dissertation.subtrackerbackend.web.rest;
 import com.dissertation.subtrackerbackend.domain.Subscription;
 import com.dissertation.subtrackerbackend.domain.dto.SubscriptionDTO;
 import com.dissertation.subtrackerbackend.service.SubscriptionService;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Data
+@AllArgsConstructor
 @RestController
 @RequestMapping("api/v1/subscription")
 public class SubscriptionController {
