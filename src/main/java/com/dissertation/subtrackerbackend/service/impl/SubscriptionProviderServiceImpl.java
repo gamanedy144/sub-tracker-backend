@@ -2,17 +2,15 @@ package com.dissertation.subtrackerbackend.service.impl;
 
 import com.dissertation.subtrackerbackend.domain.SubscriptionProvider;
 import com.dissertation.subtrackerbackend.domain.dto.SubscriptionProviderDTO;
-import com.dissertation.subtrackerbackend.domain.mapper.BaseMapper;
 import com.dissertation.subtrackerbackend.domain.mapper.SubscriptionProviderMapper;
 import com.dissertation.subtrackerbackend.repository.SubscriptionProviderRepository;
 import com.dissertation.subtrackerbackend.service.SubscriptionProviderService;
-import org.mapstruct.Mapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class ISubscriptionProviderService implements SubscriptionProviderService {
+public class SubscriptionProviderServiceImpl implements SubscriptionProviderService {
 
     SubscriptionProviderRepository subscriptionProviderRepository;
     SubscriptionProviderMapper mapper;

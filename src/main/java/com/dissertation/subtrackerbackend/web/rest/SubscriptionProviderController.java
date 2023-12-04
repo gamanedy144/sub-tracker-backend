@@ -31,7 +31,6 @@ public class SubscriptionProviderController {
     public ResponseEntity<SubscriptionProvider> saveSubscriptionProvider(@RequestBody SubscriptionProvider subscriptionProvider){
         return ResponseEntity.ok(subscriptionProviderService.saveSubscriptionProvider(subscriptionProvider));
     }
-
     @PutMapping("/update")
     public ResponseEntity<SubscriptionProvider> updateSubscriptionProvider(@RequestBody SubscriptionProviderDTO subscriptionProviderDTO){
         return ResponseEntity.ok(subscriptionProviderService.updateSubscriptionProvider(subscriptionProviderDTO));

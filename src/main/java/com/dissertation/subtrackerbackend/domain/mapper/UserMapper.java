@@ -20,10 +20,10 @@ public abstract class UserMapper implements ExtendedMapper<User, UserDTO, UserRe
     public abstract UserRepresentation toRepresentation(UserDTO userDto);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    public abstract void updateUserFromDto(UserDTO userDto, @MappingTarget User user);
+    public abstract void updateUserFromDto(@MappingTarget User user, UserDTO userDTO);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    public abstract void updateUserRepresentationFromDto(UserDTO userDTO, @MappingTarget UserRepresentation userRepresentation);
+    public abstract void updateUserRepresentationFromDto(@MappingTarget UserRepresentation userRepresentation, UserDTO userDTO);
 
 
 }
