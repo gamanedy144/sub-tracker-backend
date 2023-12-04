@@ -35,5 +35,8 @@ public class SubscriptionProviderController {
     public ResponseEntity<SubscriptionProvider> updateSubscriptionProvider(@RequestBody SubscriptionProviderDTO subscriptionProviderDTO){
         return ResponseEntity.ok(subscriptionProviderService.updateSubscriptionProvider(subscriptionProviderDTO));
     }
-
+    @DeleteMapping("/delete/{id}")
+    public void deleteSubscriptionProvider(@PathVariable long id){
+        subscriptionProviderService.delete(id);
+    }
 }

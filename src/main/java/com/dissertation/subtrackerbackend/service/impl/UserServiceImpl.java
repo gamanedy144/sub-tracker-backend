@@ -39,4 +39,10 @@ public class UserServiceImpl implements UserService {
         mapper.updateUserFromDto(userToBeSaved, userDTO);
         return userRepository.save(userToBeSaved);
     }
+
+    @Override
+    public void delete(long id){
+        User temp = userRepository.findById(id).orElseThrow();
+        userRepository.deleteById(id);
+    }
 }

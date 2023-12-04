@@ -39,4 +39,17 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         mapper.updateSubscriptionProviderFromDto(subscriptionToBeSaved, subscriptionDTO);
         return subscriptionRepository.save(subscriptionToBeSaved);
     }
+
+//    @Override
+//    public Subscription softDelete(long id) {
+//        Subscription sub = subscriptionRepository.findById(id).orElseThrow();
+//        sub.setActive(false);
+//        return subscriptionRepository.save(sub);
+//    }
+
+    @Override
+    public void delete(long id) {
+        Subscription temp = subscriptionRepository.findById(id).orElseThrow();
+        subscriptionRepository.deleteById(id);
+    }
 }

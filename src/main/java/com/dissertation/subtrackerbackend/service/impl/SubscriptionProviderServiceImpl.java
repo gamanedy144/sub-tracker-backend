@@ -40,4 +40,10 @@ public class SubscriptionProviderServiceImpl implements SubscriptionProviderServ
         mapper.updateSubscriptionProviderFromDto(subscriptionProviderToBeSaved, subscriptionProviderDTO);
         return subscriptionProviderRepository.save(subscriptionProviderToBeSaved);
     }
+
+    @Override
+    public void delete(long id) {
+        SubscriptionProvider temp = subscriptionProviderRepository.findById(id).orElseThrow();
+        subscriptionProviderRepository.deleteById(id);
+    }
 }

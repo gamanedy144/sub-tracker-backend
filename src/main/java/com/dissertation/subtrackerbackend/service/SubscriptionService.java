@@ -15,4 +15,8 @@ public interface SubscriptionService {
     Subscription saveSubscription(Subscription subscriptionProvider);
 
     Subscription updateSubscription(SubscriptionDTO subscriptionProviderDTO);
+
+//    Subscription softDelete(long id);
+
+    void delete(long id);
 }

@@ -15,4 +15,6 @@ public interface SubscriptionProviderService {
     SubscriptionProvider saveSubscriptionProvider(SubscriptionProvider subscriptionProvider);
 
     SubscriptionProvider updateSubscriptionProvider(SubscriptionProviderDTO subscriptionProviderDTO);
+
+    void delete(long id);
 }
