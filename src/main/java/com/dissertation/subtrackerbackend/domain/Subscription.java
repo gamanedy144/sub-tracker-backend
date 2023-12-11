@@ -1,15 +1,22 @@
 package com.dissertation.subtrackerbackend.domain;
 
+import io.hypersistence.utils.hibernate.type.basic.PostgreSQLEnumType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import jakarta.persistence.EnumType;
+import org.hibernate.annotations.Type;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(schema = "sub_tracker", name = "subscription")
+//@TypeDef(
+//        name = "subscription_type_enum",
+//        typeClass = PostgreSQLEnumType.class
+//)
 public class Subscription {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "subscription_generator")
@@ -20,8 +27,10 @@ public class Subscription {
     @Column(name = "subscription_name")
     private String subscriptionName;
 
-    @Column(name = "type")
-    private String type;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type", nullable = false)
+    @Type(PostgreSQLEnumType.class)
+    private SubscriptionTypeEnum type;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -30,4 +39,5 @@ public class Subscription {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "provider_id")
     private SubscriptionProvider provider;
+
 }

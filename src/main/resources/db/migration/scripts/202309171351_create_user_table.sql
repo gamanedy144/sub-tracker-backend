@@ -1,5 +1,5 @@
 --liquibase formatted sql
---changeset stu9130:202308171351_create_user_table splitStatement:true andDelimiter:;
+--changeset stu91300:202308171351_create_user_table splitStatement:true andDelimiter:;
 
 CREATE TABLE IF NOT EXISTS sub_tracker.user(
     id INT PRIMARY KEY,

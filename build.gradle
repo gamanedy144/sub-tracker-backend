@@ -36,6 +36,7 @@ dependencies {
 	implementation 'org.keycloak:keycloak-admin-client:22.0.1'
 	implementation 'org.mapstruct:mapstruct:1.5.3.Final'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
+	implementation 'io.hypersistence:hypersistence-utils-hibernate-62:3.6.1'
 }
 
 tasks.named('test') {

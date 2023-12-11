@@ -1,5 +1,5 @@
 --liquibase formatted sql
---changeset stu9130:202310071753_create_subscription_provider_table splitStatement:true andDelimiter:;
+--changeset stu91300:202310071753_create_subscription_provider_table splitStatement:true andDelimiter:;
 
 CREATE TABLE IF NOT EXISTS sub_tracker.subscription_provider(
     id INT PRIMARY KEY,
