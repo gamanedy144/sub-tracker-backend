@@ -1,4 +1,27 @@
 package com.dissertation.subtrackerbackend.domain.dto;
 
-public class SubscriptionDTO {
+import com.dissertation.subtrackerbackend.domain.SubscriptionProvider;
+import com.dissertation.subtrackerbackend.domain.SubscriptionTypeEnum;
+import com.dissertation.subtrackerbackend.domain.User;
+import com.fasterxml.jackson.annotation.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.io.Serializable;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+public class SubscriptionDTO implements Serializable {
+        private long id;
+        private String subscriptionName;
+        private SubscriptionTypeEnum type;
+        private UserDTO user;
+        private SubscriptionProviderDTO provider;
+
 }

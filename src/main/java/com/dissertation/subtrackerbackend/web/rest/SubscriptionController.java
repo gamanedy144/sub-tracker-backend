@@ -17,29 +17,26 @@ import java.util.List;
 public class SubscriptionController {
     private final SubscriptionService subscriptionService;
     @GetMapping
-    public ResponseEntity<List<Subscription>> fetchAllSubscriptionProviders(){
-        return ResponseEntity.ok(subscriptionService.fetchAllSubscriptions());
+    public ResponseEntity<List<SubscriptionDTO>> fetchAllSubscriptionProviders(){
+        List<SubscriptionDTO> subs = subscriptionService.fetchAllSubscriptions();
+        return ResponseEntity.ok(subs);
     }
     @GetMapping("/{id}")
-    public ResponseEntity<Subscription> fetchSubscriptionProviderById(@PathVariable long id){
+    public ResponseEntity<SubscriptionDTO> fetchSubscriptionProviderById(@PathVariable long id){
         return ResponseEntity.ok(subscriptionService.fetchSubscriptionById(id));
     }
     @PostMapping("/multiple")
-    public ResponseEntity<List<Subscription>> saveMultipleSubscriptionProviders(@RequestBody List<Subscription> subscriptionList){
+    public ResponseEntity<List<SubscriptionDTO>> saveMultipleSubscriptionProviders(@RequestBody List<Subscription> subscriptionList){
         return ResponseEntity.ok(subscriptionService.saveMultipleSubscriptions(subscriptionList));
     }
     @PostMapping
-    public ResponseEntity<Subscription> saveSubscriptionProvider(@RequestBody Subscription subscription){
+    public ResponseEntity<SubscriptionDTO> saveSubscriptionProvider(@RequestBody Subscription subscription){
         return ResponseEntity.ok(subscriptionService.saveSubscription(subscription));
     }
     @PutMapping("/update")
-    public ResponseEntity<Subscription> updateSubscriptionProvider(@RequestBody SubscriptionDTO subscriptionDTO){
+    public ResponseEntity<SubscriptionDTO> updateSubscriptionProvider(@RequestBody SubscriptionDTO subscriptionDTO){
         return ResponseEntity.ok(subscriptionService.updateSubscription(subscriptionDTO));
     }
-//    @PutMapping("/soft-delete/{id}")
-//    public ResponseEntity<Subscription> softDeleteSubscriptionProvider(@PathVariable long id){
-//        return ResponseEntity.ok(subscriptionService.softDelete(id));
-//    }
     @DeleteMapping("/delete/{id}")
     public void deleteSubscription(@PathVariable long id){
         subscriptionService.delete(id);

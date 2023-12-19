@@ -6,15 +6,15 @@ import com.dissertation.subtrackerbackend.domain.dto.UserDTO;
 import java.util.List;
 
 public interface UserService {
-    List<User> fetchAllUsers();
+    List<UserDTO> fetchAllUsers();
 
-    User fetchUserById(long id);
+    UserDTO fetchUserById(long id);
 
-    List<User> saveMultipleUsers(List<User> userList);
+    List<UserDTO> saveMultipleUsers(List<User> userList);
 
-    User saveUser(User user);
+    UserDTO saveUser(User user);
 
-    User updateUser(UserDTO userDto);
+    UserDTO updateUser(UserDTO userDto);
 
     void delete(long id);
 }

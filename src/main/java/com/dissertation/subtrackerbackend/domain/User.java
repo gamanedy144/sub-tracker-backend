@@ -1,13 +1,17 @@
 package com.dissertation.subtrackerbackend.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -17,7 +21,6 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_generator")
     @SequenceGenerator(schema = "sub_tracker", name = "user_generator", sequenceName = "user_sequence", allocationSize = 1)
-
     private long id;
 
     @Column(name = "username")
@@ -38,8 +41,8 @@ public class User {
     @Column(name = "profile_picture_path")
     private String profilePicturePath;
 
-    @OneToMany(mappedBy = "user")
-    private List<Subscription> subscriptionList;
-
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    @JsonManagedReference
+    private Set<Subscription> subscriptionList = new HashSet<>();
 
 }

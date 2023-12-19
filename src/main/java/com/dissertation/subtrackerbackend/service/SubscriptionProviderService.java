@@ -6,17 +6,17 @@ import com.dissertation.subtrackerbackend.domain.dto.SubscriptionProviderDTO;
 import java.util.List;
 
 public interface SubscriptionProviderService {
-    List<SubscriptionProvider> fetchAllSubscriptionProviders();
+    List<SubscriptionProviderDTO> fetchAllSubscriptionProviders();
 
-    SubscriptionProvider fetchSubscriptionProviderById(long id);
+    SubscriptionProviderDTO fetchSubscriptionProviderById(long id);
 
-    List<SubscriptionProvider> saveMultipleSubscriptionProviders(List<SubscriptionProvider> subscriptionProviderList);
+    List<SubscriptionProviderDTO> saveMultipleSubscriptionProviders(List<SubscriptionProvider> subscriptionProviderList);
 
-    SubscriptionProvider saveSubscriptionProvider(SubscriptionProvider subscriptionProvider);
+    SubscriptionProviderDTO saveSubscriptionProvider(SubscriptionProvider subscriptionProvider);
 
-    SubscriptionProvider updateSubscriptionProvider(SubscriptionProviderDTO subscriptionProviderDTO);
+    SubscriptionProviderDTO updateSubscriptionProvider(SubscriptionProviderDTO subscriptionProviderDTO);
 
     void delete(long id);
 
-    SubscriptionProvider updateSubscriptionProviderById(long id, SubscriptionProviderDTO subscriptionProviderDTO);
+    SubscriptionProviderDTO updateSubscriptionProviderById(long id, SubscriptionProviderDTO subscriptionProviderDTO);
 }

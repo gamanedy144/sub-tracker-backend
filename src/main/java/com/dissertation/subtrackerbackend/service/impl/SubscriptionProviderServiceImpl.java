@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
@@ -19,30 +20,30 @@ public class SubscriptionProviderServiceImpl implements SubscriptionProviderServ
     SubscriptionProviderRepository subscriptionProviderRepository;
     SubscriptionProviderMapper mapper;
     @Override
-    public List<SubscriptionProvider> fetchAllSubscriptionProviders() {
-        return subscriptionProviderRepository.findAll();
+    public List<SubscriptionProviderDTO> fetchAllSubscriptionProviders() {
+        return subscriptionProviderRepository.findAll().stream().map(subscriptionProvider -> mapper.toDto(subscriptionProvider)).collect(Collectors.toList());
     }
 
     @Override
-    public SubscriptionProvider fetchSubscriptionProviderById(long id) {
-        return subscriptionProviderRepository.findById(id).orElseThrow();
+    public SubscriptionProviderDTO fetchSubscriptionProviderById(long id) {
+        return mapper.toDto(subscriptionProviderRepository.findById(id).orElseThrow());
     }
 
     @Override
-    public List<SubscriptionProvider> saveMultipleSubscriptionProviders(List<SubscriptionProvider> subscriptionProviderList) {
-        return subscriptionProviderRepository.saveAll(subscriptionProviderList);
+    public List<SubscriptionProviderDTO> saveMultipleSubscriptionProviders(List<SubscriptionProvider> subscriptionProviderList) {
+        return subscriptionProviderRepository.saveAll(subscriptionProviderList).stream().map(subscriptionProvider -> mapper.toDto(subscriptionProvider)).collect(Collectors.toList());
     }
 
     @Override
-    public SubscriptionProvider saveSubscriptionProvider(SubscriptionProvider subscriptionProvider) {
-        return subscriptionProviderRepository.save(subscriptionProvider);
+    public SubscriptionProviderDTO saveSubscriptionProvider(SubscriptionProvider subscriptionProvider) {
+        return mapper.toDto(subscriptionProviderRepository.save(subscriptionProvider));
     }
 
     @Override
-    public SubscriptionProvider updateSubscriptionProvider(SubscriptionProviderDTO subscriptionProviderDTO) {
+    public SubscriptionProviderDTO updateSubscriptionProvider(SubscriptionProviderDTO subscriptionProviderDTO) {
         SubscriptionProvider subscriptionProviderToBeSaved = new SubscriptionProvider();
         mapper.updateSubscriptionProviderFromDto(subscriptionProviderToBeSaved, subscriptionProviderDTO);
-        return subscriptionProviderRepository.save(subscriptionProviderToBeSaved);
+        return mapper.toDto(subscriptionProviderRepository.save(subscriptionProviderToBeSaved));
     }
 
     @Override
@@ -52,9 +53,9 @@ public class SubscriptionProviderServiceImpl implements SubscriptionProviderServ
     }
 
     @Override
-    public SubscriptionProvider updateSubscriptionProviderById(long id, SubscriptionProviderDTO subscriptionProviderDTO) {
+    public SubscriptionProviderDTO updateSubscriptionProviderById(long id, SubscriptionProviderDTO subscriptionProviderDTO) {
         SubscriptionProvider subscriptionProviderToBeSaved = subscriptionProviderRepository.findById(id).orElseThrow();
         mapper.updateSubscriptionProviderFromDto(subscriptionProviderToBeSaved, subscriptionProviderDTO);
-        return subscriptionProviderRepository.save(subscriptionProviderToBeSaved);
+        return mapper.toDto(subscriptionProviderRepository.save(subscriptionProviderToBeSaved));
     }
 }

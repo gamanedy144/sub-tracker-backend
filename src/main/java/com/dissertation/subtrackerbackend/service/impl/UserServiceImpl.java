@@ -9,36 +9,38 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
 @AllArgsConstructor
 @Service
 public class UserServiceImpl implements UserService {
     UserRepository userRepository;
     UserMapper mapper;
     @Override
-    public List<User> fetchAllUsers() {
-        return userRepository.findAll();
+    public List<UserDTO> fetchAllUsers() {
+        return userRepository.findAll().stream().map(user -> mapper.toDto(user)).collect(Collectors.toList());
     }
 
     @Override
-    public User fetchUserById(long id) {
-        return userRepository.findById(id).orElseThrow();
+    public UserDTO fetchUserById(long id) {
+        return mapper.toDto(userRepository.findById(id).orElseThrow());
     }
 
     @Override
-    public List<User> saveMultipleUsers(List<User> subscriptionList) {
-        return userRepository.saveAll(subscriptionList);
+    public List<UserDTO> saveMultipleUsers(List<User> subscriptionList) {
+        return userRepository.saveAll(subscriptionList).stream().map(user -> mapper.toDto(user)).collect(Collectors.toList());
     }
 
     @Override
-    public User saveUser(User subscription) {
-        return userRepository.save(subscription);
+    public UserDTO saveUser(User subscription) {
+        return mapper.toDto(userRepository.save(subscription));
     }
 
     @Override
-    public User updateUser(UserDTO userDTO) {
+    public UserDTO updateUser(UserDTO userDTO) {
         User userToBeSaved = new User();
         mapper.updateUserFromDto(userToBeSaved, userDTO);
-        return userRepository.save(userToBeSaved);
+        return mapper.toDto(userRepository.save(userToBeSaved));
     }
 
     @Override

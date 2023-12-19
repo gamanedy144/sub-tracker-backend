@@ -3,11 +3,13 @@ package com.dissertation.subtrackerbackend.domain.mapper;
 import com.dissertation.subtrackerbackend.domain.SubscriptionProvider;
 import com.dissertation.subtrackerbackend.domain.dto.SubscriptionProviderDTO;
 import org.mapstruct.*;
+import org.mapstruct.factory.Mappers;
 
 @Mapper(
-        componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR
+        componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR,
+        uses = {SubscriptionMapper.class}
 )
-public abstract class SubscriptionProviderMapper implements BaseMapper<SubscriptionProvider, SubscriptionProviderDTO> {
+public interface SubscriptionProviderMapper extends BaseMapper<SubscriptionProvider, SubscriptionProviderDTO> {
 
     @Override
     public abstract SubscriptionProvider toEntity(SubscriptionProviderDTO userDTO);
@@ -17,6 +19,5 @@ public abstract class SubscriptionProviderMapper implements BaseMapper<Subscript
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     public abstract void updateSubscriptionProviderFromDto(@MappingTarget SubscriptionProvider subscriptionProvider, SubscriptionProviderDTO subscriptionProviderDTO);
-
 
 }

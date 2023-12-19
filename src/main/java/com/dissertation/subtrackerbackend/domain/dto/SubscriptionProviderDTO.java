@@ -1,18 +1,21 @@
 package com.dissertation.subtrackerbackend.domain.dto;
 
 import com.dissertation.subtrackerbackend.domain.Subscription;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.*;
 
+import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class SubscriptionProviderDTO {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class SubscriptionProviderDTO implements Serializable {
     private Long id;
     private String name;
     private String details;
-    private List<Subscription> subscriptionList;
 }

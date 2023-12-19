@@ -19,27 +19,27 @@ public class SubscriptionProviderController {
 
     private final SubscriptionProviderService subscriptionProviderService;
     @GetMapping
-    public ResponseEntity<List<SubscriptionProvider>> fetchAllSubscriptionProviders(){
+    public ResponseEntity<List<SubscriptionProviderDTO>> fetchAllSubscriptionProviders(){
         return ResponseEntity.ok(subscriptionProviderService.fetchAllSubscriptionProviders());
     }
     @GetMapping("/{id}")
-    public ResponseEntity<SubscriptionProvider> fetchSubscriptionProviderById(@PathVariable long id){
+    public ResponseEntity<SubscriptionProviderDTO> fetchSubscriptionProviderById(@PathVariable long id){
         return ResponseEntity.ok(subscriptionProviderService.fetchSubscriptionProviderById(id));
     }
     @PostMapping("/multiple")
-    public ResponseEntity<List<SubscriptionProvider>> saveMultipleSubscriptionProviders(@RequestBody List<SubscriptionProvider> subscriptionProviderList){
+    public ResponseEntity<List<SubscriptionProviderDTO>> saveMultipleSubscriptionProviders(@RequestBody List<SubscriptionProvider> subscriptionProviderList){
         return ResponseEntity.ok(subscriptionProviderService.saveMultipleSubscriptionProviders(subscriptionProviderList));
     }
     @PostMapping
-    public ResponseEntity<SubscriptionProvider> saveSubscriptionProvider(@RequestBody SubscriptionProvider subscriptionProvider){
+    public ResponseEntity<SubscriptionProviderDTO> saveSubscriptionProvider(@RequestBody SubscriptionProvider subscriptionProvider){
         return ResponseEntity.ok(subscriptionProviderService.saveSubscriptionProvider(subscriptionProvider));
     }
     @PutMapping("/update")
-    public ResponseEntity<SubscriptionProvider> updateSubscriptionProvider(@RequestBody SubscriptionProviderDTO subscriptionProviderDTO){
+    public ResponseEntity<SubscriptionProviderDTO> updateSubscriptionProvider(@RequestBody SubscriptionProviderDTO subscriptionProviderDTO){
         return ResponseEntity.ok(subscriptionProviderService.updateSubscriptionProvider(subscriptionProviderDTO));
     }
     @PutMapping("/update/{id}")
-    public ResponseEntity<SubscriptionProvider> updateSubscriptionProviderById(@PathVariable long id, @RequestBody SubscriptionProviderDTO subscriptionProviderDTO){
+    public ResponseEntity<SubscriptionProviderDTO> updateSubscriptionProviderById(@PathVariable long id, @RequestBody SubscriptionProviderDTO subscriptionProviderDTO){
         return ResponseEntity.ok(subscriptionProviderService.updateSubscriptionProviderById(id, subscriptionProviderDTO));
     }
     @DeleteMapping("/delete/{id}")

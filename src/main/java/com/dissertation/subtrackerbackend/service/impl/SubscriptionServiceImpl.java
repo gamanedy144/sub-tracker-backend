@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
@@ -16,30 +17,30 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     SubscriptionRepository subscriptionRepository;
     SubscriptionMapper mapper;
     @Override
-    public List<Subscription> fetchAllSubscriptions() {
-        return subscriptionRepository.findAll();
+    public List<SubscriptionDTO> fetchAllSubscriptions() {
+        return subscriptionRepository.findAll().stream().map(subscription -> mapper.toDto(subscription)).collect(Collectors.toList());
     }
 
     @Override
-    public Subscription fetchSubscriptionById(long id) {
-        return subscriptionRepository.findById(id).orElseThrow();
+    public SubscriptionDTO fetchSubscriptionById(long id) {
+        return mapper.toDto(subscriptionRepository.findById(id).orElseThrow());
     }
 
     @Override
-    public List<Subscription> saveMultipleSubscriptions(List<Subscription> subscriptionList) {
-        return subscriptionRepository.saveAll(subscriptionList);
+    public List<SubscriptionDTO> saveMultipleSubscriptions(List<Subscription> subscriptionList) {
+        return subscriptionRepository.saveAll(subscriptionList).stream().map(subscription -> mapper.toDto(subscription)).collect(Collectors.toList());
     }
 
     @Override
-    public Subscription saveSubscription(Subscription subscription) {
-        return subscriptionRepository.save(subscription);
+    public SubscriptionDTO saveSubscription(Subscription subscription) {
+        return mapper.toDto(subscriptionRepository.save(subscription));
     }
 
     @Override
-    public Subscription updateSubscription(SubscriptionDTO subscriptionDTO) {
+    public SubscriptionDTO updateSubscription(SubscriptionDTO subscriptionDTO) {
         Subscription subscriptionToBeSaved = new Subscription();
         mapper.updateSubscriptionProviderFromDto(subscriptionToBeSaved, subscriptionDTO);
-        return subscriptionRepository.save(subscriptionToBeSaved);
+        return mapper.toDto(subscriptionRepository.save(subscriptionToBeSaved));
     }
 
 //    @Override

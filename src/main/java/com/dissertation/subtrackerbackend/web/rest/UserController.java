@@ -17,23 +17,23 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
     @GetMapping
-    public ResponseEntity<List<User>> fetchAllUsers(){
+    public ResponseEntity<List<UserDTO>> fetchAllUsers(){
         return ResponseEntity.ok(userService.fetchAllUsers());
     }
     @GetMapping("/{id}")
-    public ResponseEntity<User> fetchUserById(@PathVariable long id){
+    public ResponseEntity<UserDTO> fetchUserById(@PathVariable long id){
         return ResponseEntity.ok(userService.fetchUserById(id));
     }
     @PostMapping("/multiple")
-    public ResponseEntity<List<User>> saveMultipleUsers(@RequestBody List<User> userList){
+    public ResponseEntity<List<UserDTO>> saveMultipleUsers(@RequestBody List<User> userList){
         return ResponseEntity.ok(userService.saveMultipleUsers(userList));
     }
     @PostMapping
-    public ResponseEntity<User> saveUser(@RequestBody User user){
+    public ResponseEntity<UserDTO> saveUser(@RequestBody User user){
         return ResponseEntity.ok(userService.saveUser(user));
     }
     @PutMapping("/update")
-    public ResponseEntity<User> updateUser(@RequestBody UserDTO userDTO){
+    public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO userDTO){
         return ResponseEntity.ok(userService.updateUser(userDTO));
     }
     @DeleteMapping("/delete/{id}")
