@@ -4,7 +4,8 @@ public enum SubscriptionTypeEnum {
     DAILY("daily"),
     MONTHLY("monthly"),
     BIMONTHLY("bi-monthly"),
-    YEARLY("yearly");
+    YEARLY("yearly"),
+    WEEKLY("weekly");
 
     public final String label;
 

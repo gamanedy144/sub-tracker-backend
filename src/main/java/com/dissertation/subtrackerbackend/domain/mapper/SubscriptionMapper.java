@@ -19,6 +19,6 @@ public interface SubscriptionMapper extends BaseMapper<Subscription, Subscriptio
     public abstract SubscriptionDTO toDto(Subscription subscription);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    public abstract void updateSubscriptionProviderFromDto(@MappingTarget Subscription subscription, SubscriptionDTO subscriptionDTO);
+    public abstract void updateSubscriptionFromDto(@MappingTarget Subscription subscription, SubscriptionDTO subscriptionDTO);
 
 }

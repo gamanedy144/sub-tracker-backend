@@ -10,18 +10,21 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class SubscriptionDTO implements Serializable {
         private long id;
         private String subscriptionName;
         private SubscriptionTypeEnum type;
         private UserDTO user;
         private SubscriptionProviderDTO provider;
-
+        private LocalDate startDate;
+        private LocalDate endDate;
+        private LocalDate nextOccurrenceDate;
+        private LocalDate lastOccurrenceDate;
 }

@@ -32,15 +32,17 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     }
 
     @Override
-    public SubscriptionDTO saveSubscription(Subscription subscription) {
-        return mapper.toDto(subscriptionRepository.save(subscription));
+    public Subscription saveSubscription(SubscriptionDTO subscriptionDTO) {
+        Subscription subscriptionToBeSaved = new Subscription();
+        mapper.updateSubscriptionFromDto(subscriptionToBeSaved, subscriptionDTO);
+        return subscriptionRepository.save(subscriptionToBeSaved);
     }
 
     @Override
-    public SubscriptionDTO updateSubscription(SubscriptionDTO subscriptionDTO) {
+    public Subscription updateSubscription(SubscriptionDTO subscriptionDTO) {
         Subscription subscriptionToBeSaved = new Subscription();
-        mapper.updateSubscriptionProviderFromDto(subscriptionToBeSaved, subscriptionDTO);
-        return mapper.toDto(subscriptionRepository.save(subscriptionToBeSaved));
+        mapper.updateSubscriptionFromDto(subscriptionToBeSaved, subscriptionDTO);
+        return subscriptionRepository.save(subscriptionToBeSaved);
     }
 
 //    @Override

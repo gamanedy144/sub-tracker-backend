@@ -12,9 +12,9 @@ public interface SubscriptionService {
 
     List<SubscriptionDTO> saveMultipleSubscriptions(List<Subscription> subscriptionProviderList);
 
-    SubscriptionDTO saveSubscription(Subscription subscriptionProvider);
+    Subscription saveSubscription(SubscriptionDTO subscriptionProvider);
 
-    SubscriptionDTO updateSubscription(SubscriptionDTO subscriptionProviderDTO);
+    Subscription updateSubscription(SubscriptionDTO subscriptionProviderDTO);
 
 //    Subscription softDelete(long id);
 

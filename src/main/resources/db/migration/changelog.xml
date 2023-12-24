@@ -9,4 +9,9 @@
     <include file="db/migration/scripts/202310071753_create_subscription_provider_table.sql" relativeToChangelogFile="false"/>
     <include file="db/migration/scripts/202310071801_create_subscription_type_enum.sql" relativeToChangelogFile="false"/>
     <include file="db/migration/scripts/202310071810_create_subscription_table.sql" relativeToChangelogFile="false"/>
+    <include file="db/migration/scripts/202312231715_alter_subscription_table.sql" relativeToChangelogFile="false"/>
+    <include file="db/migration/scripts/202312231730_alter_subscription_type_enum.sql" relativeToChangelogFile="false"/>
+    <include file="db/migration/scripts/202312231743_alter_subscription_table.sql" relativeToChangelogFile="false"/>
+    <include file="db/migration/scripts/202312231752_alter_subscription_table.sql" relativeToChangelogFile="false"/>
+    <include file="db/migration/scripts/202312231800_alter_subscription_table.sql" relativeToChangelogFile="false"/>
 </databaseChangeLog>

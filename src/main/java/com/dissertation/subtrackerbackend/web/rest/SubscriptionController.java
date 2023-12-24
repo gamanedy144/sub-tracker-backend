@@ -30,11 +30,11 @@ public class SubscriptionController {
         return ResponseEntity.ok(subscriptionService.saveMultipleSubscriptions(subscriptionList));
     }
     @PostMapping
-    public ResponseEntity<SubscriptionDTO> saveSubscriptionProvider(@RequestBody Subscription subscription){
+    public ResponseEntity<Subscription> saveSubscriptionProvider(@RequestBody SubscriptionDTO subscription){
         return ResponseEntity.ok(subscriptionService.saveSubscription(subscription));
     }
     @PutMapping("/update")
-    public ResponseEntity<SubscriptionDTO> updateSubscriptionProvider(@RequestBody SubscriptionDTO subscriptionDTO){
+    public ResponseEntity<Subscription> updateSubscriptionProvider(@RequestBody SubscriptionDTO subscriptionDTO){
         return ResponseEntity.ok(subscriptionService.updateSubscription(subscriptionDTO));
     }
     @DeleteMapping("/delete/{id}")
