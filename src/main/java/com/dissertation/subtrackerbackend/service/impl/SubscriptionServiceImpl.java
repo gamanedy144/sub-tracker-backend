@@ -1,11 +1,14 @@
 package com.dissertation.subtrackerbackend.service.impl;
 
+import com.dissertation.subtrackerbackend.config.JwtService;
 import com.dissertation.subtrackerbackend.domain.Subscription;
 import com.dissertation.subtrackerbackend.domain.dto.SubscriptionDTO;
 import com.dissertation.subtrackerbackend.domain.mapper.SubscriptionMapper;
 import com.dissertation.subtrackerbackend.repository.SubscriptionRepository;
 import com.dissertation.subtrackerbackend.service.SubscriptionService;
+import com.dissertation.subtrackerbackend.service.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +19,8 @@ import java.util.stream.Collectors;
 public class SubscriptionServiceImpl implements SubscriptionService {
     SubscriptionRepository subscriptionRepository;
     SubscriptionMapper mapper;
+    JwtService jwtService;
+    UserService userService;
     @Override
     public List<SubscriptionDTO> fetchAllSubscriptions() {
         return subscriptionRepository.findAll().stream().map(subscription -> mapper.toDto(subscription)).collect(Collectors.toList());
@@ -35,7 +40,8 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     public Subscription saveSubscription(SubscriptionDTO subscriptionDTO) {
         Subscription subscriptionToBeSaved = new Subscription();
         mapper.updateSubscriptionFromDto(subscriptionToBeSaved, subscriptionDTO);
-        return subscriptionRepository.save(subscriptionToBeSaved);
+        subscriptionToBeSaved.setUser(userService.findByEmail(jwtService.getUsername()));
+    return subscriptionRepository.save(subscriptionToBeSaved);
     }
 
     @Override
