@@ -1,5 +1,7 @@
 package com.dissertation.subtrackerbackend.config;
 
+import com.dissertation.subtrackerbackend.domain.Role;
+import com.dissertation.subtrackerbackend.domain.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -31,7 +33,12 @@ public class JwtService {
     }
 
     public String generateToken(UserDetails userDetails) {
-        return generateToken(new HashMap<>(), userDetails);
+        String fullName = ((User) userDetails).getFullName();
+        Role role = ((User) userDetails).getRole();
+        Map<String, Object> extraClaims = new HashMap<>();
+        extraClaims.put("fullName", fullName);
+        extraClaims.put("role", role);
+        return generateToken(extraClaims, userDetails);
     }
     public String generateToken(
             Map<String, Object> extraClaims,
@@ -61,12 +68,13 @@ public class JwtService {
     }
 
     private Claims extractAllClaims(String token) {
-        return Jwts
+        Claims claims = Jwts
                 .parserBuilder()
                 .setSigningKey(getSignInKey())
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
+        return claims;
     }
 
     private Key getSignInKey() {
@@ -75,13 +83,19 @@ public class JwtService {
     }
     public String getUsername() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if (authentication != null && authentication.getPrincipal() instanceof String) {
-            // Assuming the principal is the JWT token as a string
-            String token = (String) authentication.getPrincipal();
-            return extractUsername(token);
+        if (authentication != null && authentication.getPrincipal() instanceof User) {
+            String username = ((User) authentication.getPrincipal()).getEmail();
+            return username;
         }
+        return null;
+    }
 
+    public String getRole() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.getPrincipal() instanceof User) {
+            Role role = ((User) authentication.getPrincipal()).getRole();
+            return role.toString();
+        }
         return null;
     }
 }

@@ -17,24 +17,24 @@ import java.util.List;
 public class SubscriptionController {
     private final SubscriptionService subscriptionService;
     @GetMapping
-    public ResponseEntity<List<SubscriptionDTO>> fetchAllSubscriptionProviders(){
-        List<SubscriptionDTO> subs = subscriptionService.fetchAllSubscriptions();
+    public ResponseEntity<List<SubscriptionDTO>> fetchAllSubscriptions(){
+        List<SubscriptionDTO> subs = subscriptionService.fetchAllSubscriptionsForCurrentUser();
         return ResponseEntity.ok(subs);
     }
     @GetMapping("/{id}")
-    public ResponseEntity<SubscriptionDTO> fetchSubscriptionProviderById(@PathVariable long id){
+    public ResponseEntity<SubscriptionDTO> fetchSubscriptionById(@PathVariable long id){
         return ResponseEntity.ok(subscriptionService.fetchSubscriptionById(id));
     }
     @PostMapping("/multiple")
-    public ResponseEntity<List<SubscriptionDTO>> saveMultipleSubscriptionProviders(@RequestBody List<Subscription> subscriptionList){
+    public ResponseEntity<List<SubscriptionDTO>> saveMultipleSubscriptions(@RequestBody List<Subscription> subscriptionList){
         return ResponseEntity.ok(subscriptionService.saveMultipleSubscriptions(subscriptionList));
     }
     @PostMapping
-    public ResponseEntity<Subscription> saveSubscriptionProvider(@RequestBody SubscriptionDTO subscription){
+    public ResponseEntity<Subscription> saveSubscription(@RequestBody SubscriptionDTO subscription){
         return ResponseEntity.ok(subscriptionService.saveSubscription(subscription));
     }
     @PutMapping("/update")
-    public ResponseEntity<Subscription> updateSubscriptionProvider(@RequestBody SubscriptionDTO subscriptionDTO){
+    public ResponseEntity<Subscription> updateSubscription(@RequestBody SubscriptionDTO subscriptionDTO){
         return ResponseEntity.ok(subscriptionService.updateSubscription(subscriptionDTO));
     }
     @DeleteMapping("/delete/{id}")

@@ -2,6 +2,7 @@ package com.dissertation.subtrackerbackend.service.impl;
 
 import com.dissertation.subtrackerbackend.config.JwtService;
 import com.dissertation.subtrackerbackend.domain.Subscription;
+import com.dissertation.subtrackerbackend.domain.User;
 import com.dissertation.subtrackerbackend.domain.dto.SubscriptionDTO;
 import com.dissertation.subtrackerbackend.domain.mapper.SubscriptionMapper;
 import com.dissertation.subtrackerbackend.repository.SubscriptionRepository;
@@ -26,6 +27,12 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         return subscriptionRepository.findAll().stream().map(subscription -> mapper.toDto(subscription)).collect(Collectors.toList());
     }
 
+    @Override
+    public List<SubscriptionDTO> fetchAllSubscriptionsForCurrentUser() {
+        User currentUser = userService.findByEmail(jwtService.getUsername());
+        return subscriptionRepository.findAllByUser(currentUser).stream()
+                .map(subscription -> mapper.toDto(subscription)).collect(Collectors.toList());
+    }
     @Override
     public SubscriptionDTO fetchSubscriptionById(long id) {
         return mapper.toDto(subscriptionRepository.findById(id).orElseThrow());

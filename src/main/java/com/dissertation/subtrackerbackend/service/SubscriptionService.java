@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface SubscriptionService {
     List<SubscriptionDTO> fetchAllSubscriptions();
+    List<SubscriptionDTO> fetchAllSubscriptionsForCurrentUser();
 
     SubscriptionDTO fetchSubscriptionById(long id);
 
