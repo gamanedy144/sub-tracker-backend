@@ -2,10 +2,13 @@ package com.dissertation.subtrackerbackend.service.impl;
 
 import com.dissertation.subtrackerbackend.config.JwtService;
 import com.dissertation.subtrackerbackend.domain.Subscription;
+import com.dissertation.subtrackerbackend.domain.TransactionStatus;
 import com.dissertation.subtrackerbackend.domain.User;
+import com.dissertation.subtrackerbackend.domain.Transaction;
 import com.dissertation.subtrackerbackend.domain.dto.SubscriptionDTO;
 import com.dissertation.subtrackerbackend.domain.mapper.SubscriptionMapper;
 import com.dissertation.subtrackerbackend.repository.SubscriptionRepository;
+import com.dissertation.subtrackerbackend.repository.TransactionRepository;
 import com.dissertation.subtrackerbackend.service.SubscriptionService;
 import com.dissertation.subtrackerbackend.service.UserService;
 import jakarta.annotation.PostConstruct;
@@ -14,6 +17,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,6 +25,7 @@ import java.util.stream.Collectors;
 @Service
 public class SubscriptionServiceImpl implements SubscriptionService {
     SubscriptionRepository subscriptionRepository;
+    TransactionRepository transactionRepository;
     SubscriptionMapper mapper;
     JwtService jwtService;
     UserService userService;
@@ -88,6 +93,17 @@ public class SubscriptionServiceImpl implements SubscriptionService {
             if (subscription.getLastOccurrenceDate() != null &&
                     (subscription.getLastOccurrenceDate().isBefore(today) ||
                             subscription.getLastOccurrenceDate().isEqual(today))) {
+                List<Transaction> timestamps = transactionRepository.findAllByTimestampBetween(LocalDateTime.now().toLocalDate().atStartOfDay(), LocalDateTime.now().toLocalDate().atStartOfDay().plusDays(1));
+                if(timestamps.isEmpty()) {
+                    Transaction transaction = Transaction.builder()
+                            .subscription(subscription)
+                            .timestamp(LocalDateTime.now())
+                            .status(TransactionStatus.SUCCESS)
+                            .build();
+                    transactionRepository.save(transaction);
+                }
+
+
                 subscription.setLastOccurrenceDate(today);
                 subscription.setNextOccurrenceDate(subscription.calculateNextOccurrenceDate(today));
                 subscriptionRepository.save(subscription);
