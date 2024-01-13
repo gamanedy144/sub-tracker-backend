@@ -3,7 +3,6 @@ package com.dissertation.subtrackerbackend.web.rest;
 import com.dissertation.subtrackerbackend.domain.AuthenticationRequest;
 import com.dissertation.subtrackerbackend.domain.AuthenticationResponse;
 import com.dissertation.subtrackerbackend.domain.RegisterRequest;
-import com.dissertation.subtrackerbackend.domain.dto.UserCredentials;
 import com.dissertation.subtrackerbackend.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

@@ -27,4 +27,5 @@ public class SubscriptionDTO implements Serializable {
         private LocalDate endDate;
         private LocalDate nextOccurrenceDate;
         private LocalDate lastOccurrenceDate;
+        private Float price;
 }

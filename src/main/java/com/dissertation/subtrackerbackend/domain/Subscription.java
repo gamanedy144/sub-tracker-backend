@@ -56,7 +56,10 @@ public class Subscription {
     @Column
     private LocalDate lastOccurrenceDate;
 
-    private LocalDate calculateNextOccurenceDate(LocalDate date) {
+    @Column
+    private Float price;
+
+    public LocalDate calculateNextOccurrenceDate(LocalDate date) {
         return type.label.equals("yearly") ? date.plusYears(1)
                 : type.label.equals("monthly") ? date.plusMonths(1)
                 : type.label.equals("bimonthly") ? date.plusWeeks(2)
@@ -67,10 +70,10 @@ public class Subscription {
 
     @PrePersist
     private void prePersist() {
-        nextOccurrenceDate = calculateNextOccurenceDate(startDate);
+        nextOccurrenceDate = calculateNextOccurrenceDate(startDate);
         if (nextOccurrenceDate.isBefore(LocalDate.now())) {
             lastOccurrenceDate = nextOccurrenceDate;
-            nextOccurrenceDate = calculateNextOccurenceDate(nextOccurrenceDate);
+            nextOccurrenceDate = calculateNextOccurrenceDate(nextOccurrenceDate);
         }
     }
 }

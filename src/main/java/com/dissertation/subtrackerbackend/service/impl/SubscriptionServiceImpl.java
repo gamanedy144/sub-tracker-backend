@@ -8,10 +8,12 @@ import com.dissertation.subtrackerbackend.domain.mapper.SubscriptionMapper;
 import com.dissertation.subtrackerbackend.repository.SubscriptionRepository;
 import com.dissertation.subtrackerbackend.service.SubscriptionService;
 import com.dissertation.subtrackerbackend.service.UserService;
+import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -69,5 +71,27 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     public void delete(long id) {
         Subscription temp = subscriptionRepository.findById(id).orElseThrow();
         subscriptionRepository.deleteById(id);
+    }
+
+    @Override
+    @PostConstruct
+    public void initialize() {
+        updateSubscriptionDates(); // Run the update method once on startup
+    }
+    @Override
+    @Scheduled(cron = "0 0 0 * * *") // Run daily at midnight
+    public void updateSubscriptionDates() {
+        List<Subscription> subscriptions = subscriptionRepository.findAll();
+        LocalDate today = LocalDate.now();
+
+        for (Subscription subscription : subscriptions) {
+            if (subscription.getLastOccurrenceDate() != null &&
+                    (subscription.getLastOccurrenceDate().isBefore(today) ||
+                            subscription.getLastOccurrenceDate().isEqual(today))) {
+                subscription.setLastOccurrenceDate(today);
+                subscription.setNextOccurrenceDate(subscription.calculateNextOccurrenceDate(today));
+                subscriptionRepository.save(subscription);
+            }
+        }
     }
 }
