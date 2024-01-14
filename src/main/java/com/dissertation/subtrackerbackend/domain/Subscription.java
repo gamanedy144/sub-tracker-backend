@@ -59,6 +59,10 @@ public class Subscription {
     @Column
     private Float price;
 
+    @Column
+    @Enumerated(EnumType.STRING)
+    private SubscriptionCategory category;
+
     public LocalDate calculateNextOccurrenceDate(LocalDate date) {
         return type.label.equals("yearly") ? date.plusYears(1)
                 : type.label.equals("monthly") ? date.plusMonths(1)

@@ -18,4 +18,6 @@
     <include file="db/migration/scripts/202401131340_alter_subscription_table.sql" relativeToChangelogFile="false"/>
     <include file="db/migration/scripts/202401131352_alter_subscription_table.sql" relativeToChangelogFile="false"/>
     <include file="db/migration/scripts/202401131854_create_transaction_table.sql" relativeToChangelogFile="false"/>
+    <include file="db/migration/scripts/202401141900_alter_subscription_table.sql" relativeToChangelogFile="false"/>
+    <include file="db/migration/scripts/202401141905_alter_subscription_table.sql" relativeToChangelogFile="false"/>
 </databaseChangeLog>

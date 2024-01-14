@@ -1,5 +1,6 @@
 package com.dissertation.subtrackerbackend.domain.dto;
 
+import com.dissertation.subtrackerbackend.domain.SubscriptionCategory;
 import com.dissertation.subtrackerbackend.domain.SubscriptionProvider;
 import com.dissertation.subtrackerbackend.domain.SubscriptionTypeEnum;
 import com.dissertation.subtrackerbackend.domain.User;
@@ -28,4 +29,5 @@ public class SubscriptionDTO implements Serializable {
         private LocalDate nextOccurrenceDate;
         private LocalDate lastOccurrenceDate;
         private Float price;
+        private SubscriptionCategory category;
 }
