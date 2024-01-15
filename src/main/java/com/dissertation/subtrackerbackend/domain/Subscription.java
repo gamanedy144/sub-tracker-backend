@@ -64,12 +64,16 @@ public class Subscription {
     private SubscriptionCategory category;
 
     public LocalDate calculateNextOccurrenceDate(LocalDate date) {
-        return type.label.equals("yearly") ? date.plusYears(1)
+        LocalDate nextOccurrenceDate =  type.label.equals("yearly") ? date.plusYears(1)
                 : type.label.equals("monthly") ? date.plusMonths(1)
                 : type.label.equals("bimonthly") ? date.plusWeeks(2)
                 : type.label.equals("weekly") ? date.plusWeeks(1)
                 : type.label.equals("daily") ? date.plusDays(1)
                 : date;
+        if (nextOccurrenceDate.isBefore(LocalDate.now())) {
+            nextOccurrenceDate = calculateNextOccurrenceDate(nextOccurrenceDate);
+        }
+        return nextOccurrenceDate;
     }
 
     @PrePersist
@@ -78,6 +82,9 @@ public class Subscription {
         if (nextOccurrenceDate.isBefore(LocalDate.now())) {
             lastOccurrenceDate = nextOccurrenceDate;
             nextOccurrenceDate = calculateNextOccurrenceDate(nextOccurrenceDate);
+        }
+        else {
+            lastOccurrenceDate = startDate;
         }
     }
 }

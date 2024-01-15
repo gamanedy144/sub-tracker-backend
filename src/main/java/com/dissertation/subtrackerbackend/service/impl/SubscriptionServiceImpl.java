@@ -93,7 +93,11 @@ public class SubscriptionServiceImpl implements SubscriptionService {
             if (subscription.getLastOccurrenceDate() != null &&
                     (subscription.getLastOccurrenceDate().isBefore(today) ||
                             subscription.getLastOccurrenceDate().isEqual(today))) {
-                List<Transaction> timestamps = transactionRepository.findAllByTimestampBetween(LocalDateTime.now().toLocalDate().atStartOfDay(), LocalDateTime.now().toLocalDate().atStartOfDay().plusDays(1));
+                List<Transaction> timestamps = transactionRepository
+                        .findAllByTimestampBetween(
+                                LocalDateTime.now().toLocalDate().atStartOfDay(),
+                                LocalDateTime.now().toLocalDate().atStartOfDay().plusDays(1)
+                        );
                 if(timestamps.isEmpty()) {
                     Transaction transaction = Transaction.builder()
                             .subscription(subscription)
