@@ -1,7 +1,9 @@
 package com.dissertation.subtrackerbackend.service.impl;
 
 import com.dissertation.subtrackerbackend.config.JwtService;
+import com.dissertation.subtrackerbackend.domain.Subscription;
 import com.dissertation.subtrackerbackend.domain.Transaction;
+import com.dissertation.subtrackerbackend.domain.dto.SubscriptionDTO;
 import com.dissertation.subtrackerbackend.domain.dto.TransactionDTO;
 import com.dissertation.subtrackerbackend.domain.mapper.TransactionMapper;
 import com.dissertation.subtrackerbackend.repository.TransactionRepository;
@@ -37,6 +39,20 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public List<TransactionDTO> findAllDtosForCurrentUser() {
         return transactionRepository.findAllByUserEmail(jwtService.getUsername())
+                .stream().map(transaction -> mapper.toDto(transaction))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<TransactionDTO> findBySubscription(Subscription subscription) {
+        return transactionRepository.findAllBySubscription(subscription)
+                .stream().map(transaction -> mapper.toDto(transaction))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<TransactionDTO> findBySubscriptions(List<Subscription> subscriptions) {
+        return transactionRepository.findAllBySubscriptionIn(subscriptions)
                 .stream().map(transaction -> mapper.toDto(transaction))
                 .collect(Collectors.toList());
     }
