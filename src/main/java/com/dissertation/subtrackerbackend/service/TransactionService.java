@@ -9,4 +9,6 @@ public interface TransactionService {
     List<Transaction> findAll();
 
     List<TransactionDTO> findAllDtos();
+
+    List<TransactionDTO> findAllDtosForCurrentUser();
 }

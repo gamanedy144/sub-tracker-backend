@@ -21,7 +21,7 @@ public class TransactionController {
 
     @GetMapping
     public ResponseEntity<List<TransactionDTO>> fetchAllSubscriptions(){
-        List<TransactionDTO> transactions = transactionService.findAllDtos();
+        List<TransactionDTO> transactions = transactionService.findAllDtosForCurrentUser();
         return ResponseEntity.ok(transactions);
     }
 }
