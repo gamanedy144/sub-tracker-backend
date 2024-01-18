@@ -90,21 +90,30 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         LocalDate today = LocalDate.now();
 
         for (Subscription subscription : subscriptions) {
-            if (subscription.getLastOccurrenceDate() != null &&
-                    (subscription.getLastOccurrenceDate().isBefore(today) ||
-                            subscription.getLastOccurrenceDate().isEqual(today))) {
-                List<Transaction> timestamps = transactionRepository
-                        .findAllByTimestampBetween(
-                                LocalDateTime.now().toLocalDate().atStartOfDay(),
-                                LocalDateTime.now().toLocalDate().atStartOfDay().plusDays(1)
-                        );
-                if(timestamps.isEmpty()) {
-                    Transaction transaction = Transaction.builder()
-                            .subscription(subscription)
-                            .timestamp(LocalDateTime.now())
-                            .status(TransactionStatus.SUCCESS)
-                            .build();
-                    transactionRepository.save(transaction);
+            if (subscription.getLastOccurrenceDate() != null){
+//                    &&
+//                    (subscription.getLastOccurrenceDate().isBefore(today) ||
+//                            subscription.getLastOccurrenceDate().isEqual(today))) {
+                LocalDate lastOccurrence = subscription.getLastOccurrenceDate();
+                LocalDate start = lastOccurrence.plusDays(1); // Start from the day after the last occurrence
+
+                while (start.isBefore(today) || start.isEqual(today)) {
+                    List<Transaction> timestamps = transactionRepository
+                            .findAllByTimestampBetween(
+                                    start.atStartOfDay(),
+                                    start.plusDays(1).atStartOfDay()
+                            );
+
+                    if (timestamps.isEmpty()) {
+                        Transaction transaction = Transaction.builder()
+                                .subscription(subscription)
+                                .timestamp(start.atStartOfDay())
+                                .status(TransactionStatus.SUCCESS)
+                                .build();
+                        transactionRepository.save(transaction);
+                    }
+
+                    start = start.plusDays(1);
                 }
 
 
