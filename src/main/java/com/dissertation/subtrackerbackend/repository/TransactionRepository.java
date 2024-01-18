@@ -14,6 +14,9 @@ import java.util.List;
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
 
     List<Transaction> findAllByTimestampBetween(LocalDateTime startOfDay, LocalDateTime endOfDay);
+    List<Transaction> findAllByTimestampBetweenAndSubscription(LocalDateTime startOfDay, LocalDateTime endOfDay, Subscription subscription);
+
+
 
     List<Transaction> findAllBySubscription(Subscription subscription);
 

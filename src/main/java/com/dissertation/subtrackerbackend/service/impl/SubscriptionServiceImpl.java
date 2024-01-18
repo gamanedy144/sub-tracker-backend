@@ -91,36 +91,41 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 
         for (Subscription subscription : subscriptions) {
             if (subscription.getLastOccurrenceDate() != null){
-//                    &&
-//                    (subscription.getLastOccurrenceDate().isBefore(today) ||
-//                            subscription.getLastOccurrenceDate().isEqual(today))) {
-                LocalDate lastOccurrence = subscription.getLastOccurrenceDate();
-                LocalDate start = lastOccurrence.plusDays(1); // Start from the day after the last occurrence
-
-                while (start.isBefore(today) || start.isEqual(today)) {
-                    List<Transaction> timestamps = transactionRepository
-                            .findAllByTimestampBetween(
-                                    start.atStartOfDay(),
-                                    start.plusDays(1).atStartOfDay()
-                            );
-
-                    if (timestamps.isEmpty()) {
-                        Transaction transaction = Transaction.builder()
-                                .subscription(subscription)
-                                .timestamp(start.atStartOfDay())
-                                .status(TransactionStatus.SUCCESS)
-                                .build();
-                        transactionRepository.save(transaction);
-                    }
-
-                    start = start.plusDays(1);
-                }
-
-
-                subscription.setLastOccurrenceDate(today);
-                subscription.setNextOccurrenceDate(subscription.calculateNextOccurrenceDate(today));
-                subscriptionRepository.save(subscription);
+                processSubscription(subscription, today);
             }
+        }
+    }
+
+    private void processSubscription(Subscription subscription, LocalDate today) {
+        LocalDate lastOccurrence = subscription.getLastOccurrenceDate();
+        LocalDate newLast = subscription.getNextOccurrenceDate();
+        LocalDate start = lastOccurrence;
+        while (start.isBefore(today) || start.isEqual(today) ) {
+            handleTransactionCreation(subscription, start);
+            newLast = start;
+            start = subscription.calculateNextOccurrenceDate(start);
+        }
+
+        subscription.setLastOccurrenceDate(newLast);
+        subscription.setNextOccurrenceDate(subscription.calculateNextOccurrenceDate(newLast));
+        subscriptionRepository.save(subscription);
+    }
+
+    private void handleTransactionCreation(Subscription subscription, LocalDate date) {
+        List<Transaction> timestamps = transactionRepository
+                .findAllByTimestampBetweenAndSubscription(
+                        date.atStartOfDay(),
+                        date.plusDays(1).atStartOfDay(),
+                        subscription
+                );
+
+        if (timestamps.isEmpty()) {
+            Transaction transaction = Transaction.builder()
+                    .subscription(subscription)
+                    .timestamp(date.atStartOfDay())
+                    .status(TransactionStatus.SUCCESS)
+                    .build();
+            transactionRepository.save(transaction);
         }
     }
 }

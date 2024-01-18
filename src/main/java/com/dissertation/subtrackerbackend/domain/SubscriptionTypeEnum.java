@@ -3,7 +3,7 @@ package com.dissertation.subtrackerbackend.domain;
 public enum SubscriptionTypeEnum {
     DAILY("daily"),
     MONTHLY("monthly"),
-    BIMONTHLY("bi-monthly"),
+    BIMONTHLY("bimonthly"),
     YEARLY("yearly"),
     WEEKLY("weekly");
 
@@ -11,5 +11,9 @@ public enum SubscriptionTypeEnum {
 
     private SubscriptionTypeEnum(String label){
         this.label = label;
+    }
+
+    public String toLowerCase() {
+        return this.label.toLowerCase();
     }
 }
