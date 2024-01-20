@@ -18,5 +18,8 @@ public interface UserService {
 
     void delete(long id);
 
+    UserDTO findDtoByEmail(String email);
+
     User findByEmail(String email);
+    User getCurrentUser();
 }

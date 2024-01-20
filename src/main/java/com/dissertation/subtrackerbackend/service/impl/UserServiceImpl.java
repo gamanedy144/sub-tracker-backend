@@ -1,5 +1,6 @@
 package com.dissertation.subtrackerbackend.service.impl;
 
+import com.dissertation.subtrackerbackend.config.JwtService;
 import com.dissertation.subtrackerbackend.domain.User;
 import com.dissertation.subtrackerbackend.domain.dto.UserDTO;
 import com.dissertation.subtrackerbackend.domain.mapper.UserMapper;
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
     UserRepository userRepository;
     UserMapper mapper;
+    JwtService jwtService;
     @Override
     public List<UserDTO> fetchAllUsers() {
         return userRepository.findAll().stream().map(user -> mapper.toDto(user)).collect(Collectors.toList());
@@ -38,7 +40,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO updateUser(UserDTO userDTO) {
-        User userToBeSaved = new User();
+        User userToBeSaved = userRepository.findById(userDTO.getId()).get();
         mapper.updateUserFromDto(userToBeSaved, userDTO);
         return mapper.toDto(userRepository.save(userToBeSaved));
     }
@@ -50,7 +52,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDTO findDtoByEmail(String email) {
+        return mapper.toDto(userRepository.findByEmail(email).orElseThrow());
+    }
+
+    @Override
     public User findByEmail(String email) {
         return userRepository.findByEmail(email).orElseThrow();
+    }
+    @Override
+    public User getCurrentUser() {
+        return userRepository.findByEmail(jwtService.getUsername()).get();
     }
 }

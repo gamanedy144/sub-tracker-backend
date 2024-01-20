@@ -2,6 +2,7 @@ package com.dissertation.subtrackerbackend.web.rest;
 
 import com.dissertation.subtrackerbackend.domain.AuthenticationRequest;
 import com.dissertation.subtrackerbackend.domain.AuthenticationResponse;
+import com.dissertation.subtrackerbackend.domain.ChangePasswordRequest;
 import com.dissertation.subtrackerbackend.domain.RegisterRequest;
 import com.dissertation.subtrackerbackend.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,14 @@ public class AuthenticationController {
             @RequestBody AuthenticationRequest request
     ) {
         return ResponseEntity.ok(service.authenticate(request));
+
+    }
+
+    @PostMapping("/change-password")
+    public ResponseEntity<AuthenticationResponse> changePassword(
+            @RequestBody ChangePasswordRequest request
+    ) throws Exception {
+        return ResponseEntity.ok(service.changePassword(request));
 
     }
 }

@@ -40,4 +40,10 @@ public class UserController {
     public void deleteUser(@PathVariable long id){
         userService.delete(id);
     }
+
+    @GetMapping("/find-by-email/{email}")
+    public ResponseEntity<UserDTO> fetchUserByEmail(@PathVariable String email){
+        return ResponseEntity.ok(userService.findDtoByEmail(email));
+    }
+
 }

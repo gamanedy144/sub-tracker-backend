@@ -30,4 +30,7 @@ public interface SubscriptionService {
     void updateSubscriptionDates();
 
     List<SubscriptionDTO> getAllSubscriptionsForCurrentUser();
+
+    Integer countSubscriptionsForCurrentUser();
+
 }

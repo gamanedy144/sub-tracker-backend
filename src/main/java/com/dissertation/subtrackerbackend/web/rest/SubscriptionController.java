@@ -41,4 +41,9 @@ public class SubscriptionController {
     public void deleteSubscription(@PathVariable long id){
         subscriptionService.delete(id);
     }
+
+    @GetMapping("/count")
+    public ResponseEntity<Integer> countSubscriptionsForCurrentUser() {
+        return ResponseEntity.ok(subscriptionService.countSubscriptionsForCurrentUser());
+    }
 }

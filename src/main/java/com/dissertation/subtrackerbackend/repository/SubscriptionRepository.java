@@ -11,4 +11,6 @@ import java.util.List;
 public interface SubscriptionRepository extends JpaRepository<Subscription, Long> {
 
     List<Subscription> findAllByUser(User user);
+
+    Integer countAllByUser(User user);
 }

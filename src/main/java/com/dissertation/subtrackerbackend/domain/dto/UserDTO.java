@@ -27,4 +27,5 @@ public class UserDTO implements Serializable {
     private String lastName;
     private String profilePicturePath;
     private Set<SubscriptionDTO> subscriptionList = new HashSet<>();
+    private String appUsername;
 }

@@ -36,8 +36,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 
     @Override
     public List<SubscriptionDTO> fetchAllSubscriptionsForCurrentUser() {
-        User currentUser = userService.findByEmail(jwtService.getUsername());
-        return subscriptionRepository.findAllByUser(currentUser).stream()
+        return subscriptionRepository.findAllByUser(userService.getCurrentUser()).stream()
                 .map(subscription -> mapper.toDto(subscription)).collect(Collectors.toList());
     }
     @Override
@@ -47,21 +46,24 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 
     @Override
     public List<SubscriptionDTO> saveMultipleSubscriptions(List<Subscription> subscriptionList) {
-        return subscriptionRepository.saveAll(subscriptionList).stream().map(subscription -> mapper.toDto(subscription)).collect(Collectors.toList());
+        return subscriptionRepository.saveAll(subscriptionList).stream()
+                .map(subscription -> mapper.toDto(subscription))
+                .collect(Collectors.toList());
     }
 
     @Override
     public Subscription saveSubscription(SubscriptionDTO subscriptionDTO) {
         Subscription subscriptionToBeSaved = new Subscription();
         mapper.updateSubscriptionFromDto(subscriptionToBeSaved, subscriptionDTO);
-        subscriptionToBeSaved.setUser(userService.findByEmail(jwtService.getUsername()));
+        subscriptionToBeSaved.setUser(userService.getCurrentUser());
     return subscriptionRepository.save(subscriptionToBeSaved);
     }
 
     @Override
     public Subscription updateSubscription(SubscriptionDTO subscriptionDTO) {
-        Subscription subscriptionToBeSaved = new Subscription();
+        Subscription subscriptionToBeSaved = subscriptionRepository.findById(subscriptionDTO.getId()).orElseThrow();
         mapper.updateSubscriptionFromDto(subscriptionToBeSaved, subscriptionDTO);
+        subscriptionToBeSaved.setUser(userService.getCurrentUser());
         return subscriptionRepository.save(subscriptionToBeSaved);
     }
 
@@ -98,7 +100,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 
     @Override
     public List<SubscriptionDTO> getAllSubscriptionsForCurrentUser() {
-        return mapper.toDtos(subscriptionRepository.findAllByUser(userService.findByEmail(jwtService.getUsername())));
+        return mapper.toDtos(subscriptionRepository.findAllByUser(userService.getCurrentUser()));
     }
 
     private void processSubscription(Subscription subscription, LocalDate today) {
@@ -134,5 +136,8 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         }
     }
 
-
+    @Override
+    public Integer countSubscriptionsForCurrentUser() {
+        return subscriptionRepository.countAllByUser(userService.getCurrentUser());
+    }
 }
