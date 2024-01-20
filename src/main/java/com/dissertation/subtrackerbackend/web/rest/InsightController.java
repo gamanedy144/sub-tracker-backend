@@ -19,19 +19,24 @@ import java.util.Map;
 public class InsightController {
 
     InsightService insightService;
-    @GetMapping("/ceva-1")
+    @GetMapping("/monthly-spendings")
     public ResponseEntity<Map<String, Double>> getFirstThing() {
         return ResponseEntity.ok(insightService.calculateMonthlySpendings());
     }
-    @GetMapping("/ceva-2")
-    public ResponseEntity<Map<String, Map<SubscriptionCategory, Double>>> get2ndThing() {
-        return ResponseEntity.ok(insightService.calculateMonthlySpendingsByCategory());
+    @GetMapping("/monthly-spendings-category")
+    public ResponseEntity<Map<SubscriptionCategory, Double>> get2ndThing() {
+        return ResponseEntity.ok(insightService.calculateCurrentMonthSpendingsByCategory());
     }
-    @GetMapping("/ceva-3")
-    public ResponseEntity<Map<String, Double>> get3rdThing() {
-        return ResponseEntity.ok(insightService.calculateTotalSpendingPerMonthOrYear("yyyy"));
+    @GetMapping("/monthly-spendings-month-year/{type}")
+    public ResponseEntity<Map<String, Double>> get3rdThing(@PathVariable String type) {
+        return ResponseEntity.ok(insightService.calculateTotalSpendingPerMonthOrYear(type));
     }
-    @GetMapping("/ceva-4/{months}")
+    @GetMapping("/monthly-spendings-current-year/")
+    public ResponseEntity<Double> getSpendingsCurrentYear() {
+        return ResponseEntity.ok(insightService.calculateTotalSpendingUntilPresentCurrentYear());
+    }
+
+    @GetMapping("/monthly-spendings-future/{months}")
     public ResponseEntity<Map<String, Double>> get4thThing(@PathVariable int months) {
         return ResponseEntity.ok(insightService.estimateFutureSpending(months));
     }

@@ -1,7 +1,6 @@
 package com.dissertation.subtrackerbackend.service.impl;
 
 import com.dissertation.subtrackerbackend.config.JwtService;
-import com.dissertation.subtrackerbackend.domain.Subscription;
 import com.dissertation.subtrackerbackend.domain.SubscriptionCategory;
 import com.dissertation.subtrackerbackend.domain.dto.SubscriptionDTO;
 import com.dissertation.subtrackerbackend.domain.dto.TransactionDTO;
@@ -55,6 +54,24 @@ public class InsightServiceImpl implements InsightService {
                                 transaction -> transaction.getSubscription().getCategory(),
                                 Collectors.summingDouble(transaction -> transaction.getSubscription().getPrice())
                         )
+                ));
+    }
+    @Override
+    public Map<SubscriptionCategory, Double> calculateCurrentMonthSpendingsByCategory() {
+        List<TransactionDTO> transactionList = transactionService.findAllDtosForCurrentUser();
+
+        LocalDate currentDate = LocalDate.now();
+        String currentMonthKey = currentDate.format(DateTimeFormatter.ofPattern("yyyy-MM"));
+
+        return transactionList.stream()
+                .filter(transaction -> {
+                    LocalDate transactionDate = transaction.getTimestamp().toLocalDate();
+                    String transactionMonthKey = transactionDate.format(DateTimeFormatter.ofPattern("yyyy-MM"));
+                    return currentMonthKey.equals(transactionMonthKey);
+                })
+                .collect(Collectors.groupingBy(
+                        transaction -> transaction.getSubscription().getCategory(),
+                        Collectors.summingDouble(transaction -> transaction.getSubscription().getPrice())
                 ));
     }
 
@@ -124,5 +141,64 @@ public class InsightServiceImpl implements InsightService {
         }
 
         return subscriptionDTO.getPrice() * billingFrequency;
+    }
+
+    @Override
+    public double calculateEstimatedSpendingForCurrentYear() {
+        // Fetch all subscriptions for the current user
+        List<SubscriptionDTO> subscriptions = subscriptionService.getAllSubscriptionsForCurrentUser();
+
+        // Get the current date
+        LocalDate currentDate = LocalDate.now();
+
+        // Calculate estimated spending for each subscription
+        double totalEstimatedSpending = subscriptions.stream()
+                .mapToDouble(subscription -> calculateSubscriptionSpendingForYear(subscription, currentDate))
+                .sum();
+
+        return totalEstimatedSpending;
+    }
+    @Override
+    public double calculateSubscriptionSpendingForYear(SubscriptionDTO subscription, LocalDate currentDate) {
+        int daysInYear = currentDate.isLeapYear() ? 366 : 365;
+
+        double billingFrequency;
+        switch (subscription.getType()) {
+            case DAILY:
+                billingFrequency = daysInYear;
+                break;
+            case WEEKLY:
+                billingFrequency = (double) daysInYear / 7;
+                break;
+            case BIMONTHLY:
+                billingFrequency = 24;
+                break;
+            case MONTHLY:
+                billingFrequency = 12;
+                break;
+            case YEARLY:
+                billingFrequency = 1;
+                break;
+            default:
+                billingFrequency = 1;
+                break;
+        }
+
+        return subscription.getPrice() * billingFrequency;
+    }
+
+    @Override
+    public Double calculateTotalSpendingUntilPresentCurrentYear() {
+        List<SubscriptionDTO> activeSubscriptions = subscriptionService
+                .fetchAllSubscriptionsForCurrentUser();
+
+        List<TransactionDTO> transactions = transactionService
+                .findBySubscriptions(subscriptionMapper.toEntities(activeSubscriptions));
+        LocalDate currentDate = LocalDate.now();
+
+        return transactions.stream()
+                .filter(transaction -> transaction.getTimestamp().getYear() == currentDate.getYear())
+                .mapToDouble(transaction -> transaction.getSubscription().getPrice())
+                .sum();
     }
 }

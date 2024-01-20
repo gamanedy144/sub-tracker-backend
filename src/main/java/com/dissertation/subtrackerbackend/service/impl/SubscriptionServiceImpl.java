@@ -96,6 +96,11 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         }
     }
 
+    @Override
+    public List<SubscriptionDTO> getAllSubscriptionsForCurrentUser() {
+        return mapper.toDtos(subscriptionRepository.findAllByUser(userService.findByEmail(jwtService.getUsername())));
+    }
+
     private void processSubscription(Subscription subscription, LocalDate today) {
         LocalDate lastOccurrence = subscription.getLastOccurrenceDate();
         LocalDate newLast = subscription.getNextOccurrenceDate();
@@ -128,4 +133,6 @@ public class SubscriptionServiceImpl implements SubscriptionService {
             transactionRepository.save(transaction);
         }
     }
+
+
 }

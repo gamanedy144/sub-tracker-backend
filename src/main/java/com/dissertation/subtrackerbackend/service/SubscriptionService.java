@@ -28,4 +28,6 @@ public interface SubscriptionService {
 
     @Scheduled(cron = "0 0 0 * * *") // Run daily at midnight
     void updateSubscriptionDates();
+
+    List<SubscriptionDTO> getAllSubscriptionsForCurrentUser();
 }

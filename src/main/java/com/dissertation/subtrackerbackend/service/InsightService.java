@@ -12,6 +12,8 @@ public interface InsightService {
 
     Map<String, Map<SubscriptionCategory, Double>> calculateMonthlySpendingsByCategory();
 
+    Map<SubscriptionCategory, Double> calculateCurrentMonthSpendingsByCategory();
+
     Map<String, Double> calculateTotalSpendingPerMonthOrYear(String period);
 
     Map<String, Double> estimateFutureSpending(int months);
@@ -19,4 +21,10 @@ public interface InsightService {
     double calculateTotalSpendingForSubscriptions(List<SubscriptionDTO> subscriptions, LocalDate date);
 
     double calculateSubscriptionSpending(SubscriptionDTO subscriptionDTO, LocalDate date);
+
+    double calculateEstimatedSpendingForCurrentYear();
+
+    double calculateSubscriptionSpendingForYear(SubscriptionDTO subscription, LocalDate currentDate);
+
+    Double calculateTotalSpendingUntilPresentCurrentYear();
 }
