@@ -41,5 +41,10 @@ public class InsightController {
         return ResponseEntity.ok(insightService.estimateFutureSpending(months));
     }
 
+    @GetMapping("/admin/users-created-month")
+    public ResponseEntity<Map<String, Long>> calculateUsersCreatedMonthly() {
+        return ResponseEntity.ok(insightService.countUsersCreated());
+    }
+
 
 }

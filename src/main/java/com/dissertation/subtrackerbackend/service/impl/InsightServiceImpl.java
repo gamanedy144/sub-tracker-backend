@@ -1,14 +1,15 @@
 package com.dissertation.subtrackerbackend.service.impl;
 
-import com.dissertation.subtrackerbackend.config.JwtService;
 import com.dissertation.subtrackerbackend.domain.SubscriptionCategory;
 import com.dissertation.subtrackerbackend.domain.dto.SubscriptionDTO;
 import com.dissertation.subtrackerbackend.domain.dto.TransactionDTO;
+import com.dissertation.subtrackerbackend.domain.dto.UserDTO;
 import com.dissertation.subtrackerbackend.domain.mapper.SubscriptionMapper;
 import com.dissertation.subtrackerbackend.domain.mapper.TransactionMapper;
 import com.dissertation.subtrackerbackend.service.InsightService;
 import com.dissertation.subtrackerbackend.service.SubscriptionService;
 import com.dissertation.subtrackerbackend.service.TransactionService;
+import com.dissertation.subtrackerbackend.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.stereotype.Service;
@@ -28,10 +29,10 @@ import java.util.stream.Collectors;
 public class InsightServiceImpl implements InsightService {
 
     TransactionService transactionService;
-    JwtService jwtService;
     SubscriptionService subscriptionService;
     SubscriptionMapper subscriptionMapper;
     TransactionMapper transactionMapper;
+    UserService userService;
 
     @Override
     public Map<String, Double> calculateMonthlySpendings() {
@@ -145,13 +146,9 @@ public class InsightServiceImpl implements InsightService {
 
     @Override
     public double calculateEstimatedSpendingForCurrentYear() {
-        // Fetch all subscriptions for the current user
         List<SubscriptionDTO> subscriptions = subscriptionService.getAllSubscriptionsForCurrentUser();
-
-        // Get the current date
         LocalDate currentDate = LocalDate.now();
 
-        // Calculate estimated spending for each subscription
         double totalEstimatedSpending = subscriptions.stream()
                 .mapToDouble(subscription -> calculateSubscriptionSpendingForYear(subscription, currentDate))
                 .sum();
@@ -201,4 +198,16 @@ public class InsightServiceImpl implements InsightService {
                 .mapToDouble(transaction -> transaction.getSubscription().getPrice())
                 .sum();
     }
+
+    @Override
+    public Map<String, Long> countUsersCreated() {
+        List<UserDTO> users = userService.fetchAllUsers();
+
+        return users.stream()
+                .collect(Collectors.groupingBy(
+                        user -> user.getCreateTs().format(DateTimeFormatter.ofPattern("yyyy-MM")),
+                        Collectors.counting()
+                ));
+    }
+
 }

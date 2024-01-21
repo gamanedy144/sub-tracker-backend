@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -28,4 +29,6 @@ public class UserDTO implements Serializable {
     private String profilePicturePath;
     private Set<SubscriptionDTO> subscriptionList = new HashSet<>();
     private String appUsername;
+    private LocalDateTime createTs;
+    private String role;
 }

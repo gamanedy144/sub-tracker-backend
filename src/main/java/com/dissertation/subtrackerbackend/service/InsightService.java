@@ -27,4 +27,6 @@ public interface InsightService {
     double calculateSubscriptionSpendingForYear(SubscriptionDTO subscription, LocalDate currentDate);
 
     Double calculateTotalSpendingUntilPresentCurrentYear();
+
+    Map<String, Long> countUsersCreated();
 }
