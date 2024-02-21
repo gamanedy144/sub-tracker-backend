@@ -38,7 +38,7 @@ public class InsightController {
 
     @GetMapping("/monthly-spendings-future/{months}")
     public ResponseEntity<Map<String, Double>> get4thThing(@PathVariable int months) {
-        return ResponseEntity.ok(insightService.estimateFutureSpending(months));
+        return ResponseEntity.ok(insightService.calculateEstimatedSpendingForCurrentYear());
     }
 
     @GetMapping("/admin/users-created-month")

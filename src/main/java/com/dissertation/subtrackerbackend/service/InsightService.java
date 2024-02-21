@@ -22,7 +22,7 @@ public interface InsightService {
 
     double calculateSubscriptionSpending(SubscriptionDTO subscriptionDTO, LocalDate date);
 
-    double calculateEstimatedSpendingForCurrentYear();
+    Map<String, Double> calculateEstimatedSpendingForCurrentYear();
 
     double calculateSubscriptionSpendingForYear(SubscriptionDTO subscription, LocalDate currentDate);
 

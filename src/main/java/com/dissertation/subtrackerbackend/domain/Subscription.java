@@ -14,12 +14,14 @@ import java.io.ObjectOutputStream;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
+import java.util.Objects;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@ToString
 @Table(schema = "sub_tracker", name = "subscription")
 public class Subscription {
     @Id
@@ -70,9 +72,12 @@ public class Subscription {
                 : type.label.equals("weekly") ? date.plusWeeks(1)
                 : type.label.equals("daily") ? date.plusDays(1)
                 : date;
-        if (nextOccurrenceDate.isBefore(LocalDate.now())) {
-            nextOccurrenceDate = calculateNextOccurrenceDate(nextOccurrenceDate);
+        if (Objects.nonNull(endDate) && (nextOccurrenceDate.isAfter(endDate) || nextOccurrenceDate.isEqual(endDate))) {
+            nextOccurrenceDate = endDate;
         }
+//        else if (nextOccurrenceDate.isBefore(LocalDate.now())) {
+//            nextOccurrenceDate = calculateNextOccurrenceDate(nextOccurrenceDate);
+//        }
         return nextOccurrenceDate;
     }
 
@@ -80,8 +85,10 @@ public class Subscription {
     private void prePersist() {
         nextOccurrenceDate = calculateNextOccurrenceDate(startDate);
         if (nextOccurrenceDate.isBefore(LocalDate.now())) {
-            lastOccurrenceDate = nextOccurrenceDate;
-            nextOccurrenceDate = calculateNextOccurrenceDate(nextOccurrenceDate);
+            while (nextOccurrenceDate.isBefore(LocalDate.now())) {
+                lastOccurrenceDate = nextOccurrenceDate;
+                nextOccurrenceDate = calculateNextOccurrenceDate(nextOccurrenceDate);
+            }
         }
         else {
             lastOccurrenceDate = startDate;

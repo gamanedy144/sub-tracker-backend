@@ -4,6 +4,7 @@ import com.dissertation.subtrackerbackend.domain.SubscriptionCategory;
 import com.dissertation.subtrackerbackend.domain.dto.SubscriptionDTO;
 import com.dissertation.subtrackerbackend.domain.dto.TransactionDTO;
 import com.dissertation.subtrackerbackend.domain.dto.UserDTO;
+import com.dissertation.subtrackerbackend.domain.Subscription;
 import com.dissertation.subtrackerbackend.domain.mapper.SubscriptionMapper;
 import com.dissertation.subtrackerbackend.domain.mapper.TransactionMapper;
 import com.dissertation.subtrackerbackend.service.InsightService;
@@ -18,9 +19,7 @@ import java.time.LocalDate;
 import java.time.Year;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Data
@@ -145,15 +144,46 @@ public class InsightServiceImpl implements InsightService {
     }
 
     @Override
-    public double calculateEstimatedSpendingForCurrentYear() {
-        List<SubscriptionDTO> subscriptions = subscriptionService.getAllSubscriptionsForCurrentUser();
+    public Map<String, Double> calculateEstimatedSpendingForCurrentYear() {
+        List<Subscription> subscriptions = subscriptionService.getAllSubscriptionsForCurrentUser();
         LocalDate currentDate = LocalDate.now();
+        // TODO needs implementation !!!!
+        int currentYear = currentDate.getYear();
+        int currentMonth = currentDate.getMonthValue();
+        int nextMonth = currentMonth % 12 + 1;
+        int nextYear = currentMonth == 12 ? currentYear + 1 : currentYear;
 
-        double totalEstimatedSpending = subscriptions.stream()
-                .mapToDouble(subscription -> calculateSubscriptionSpendingForYear(subscription, currentDate))
-                .sum();
+        Map<String, Double> monthlySpendingMap = new HashMap<>();
 
-        return totalEstimatedSpending;
+        for (Subscription subscription : subscriptions) {
+            double subscriptionCost = subscription.getPrice();
+            if (Objects.nonNull(subscription.getNextOccurrenceDate())) {
+                LocalDate startDate = subscription.getNextOccurrenceDate();
+                while (subscription.getNextOccurrenceDate().getMonthValue() < nextMonth && subscription.getNextOccurrenceDate().getYear() < nextYear) {
+                    startDate = subscription.calculateNextOccurrenceDate(startDate);
+                }
+                while (startDate.getMonthValue() >= nextMonth && startDate.getYear() <= nextYear) {
+                    String month = String.format("%02d", startDate.getMonthValue()); // Format month as two-digit string
+                    String monthYearKey = month + "-" + startDate.getYear();
+                    monthlySpendingMap.put(monthYearKey, monthlySpendingMap.getOrDefault(monthYearKey, 0.0) + subscriptionCost);
+                    startDate = subscription.calculateNextOccurrenceDate(startDate);
+                }
+            }
+//            if (Objects.nonNull(subscription.getLastOccurrenceDate())) {
+//                    startDate = subscription.getLastOccurrenceDate();
+//            }
+//            else startDate = subscription.getStartDate();
+
+
+//            while (startDate.getMonthValue() < currentMonth && ) {
+//                startDate = subscription.calculateNextOccurrenceDate(startDate);
+//            }
+            // Iterate through months until reaching the current month
+//            for (int i = 0; i < 12; i++) {
+
+        }
+
+        return monthlySpendingMap;
     }
     @Override
     public double calculateSubscriptionSpendingForYear(SubscriptionDTO subscription, LocalDate currentDate) {

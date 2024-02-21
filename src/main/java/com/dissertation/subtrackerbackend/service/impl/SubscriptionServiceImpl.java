@@ -13,12 +13,15 @@ import com.dissertation.subtrackerbackend.service.SubscriptionService;
 import com.dissertation.subtrackerbackend.service.UserService;
 import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -29,6 +32,24 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     SubscriptionMapper mapper;
     JwtService jwtService;
     UserService userService;
+    private static Logger LOGGER = LoggerFactory.getLogger(SubscriptionServiceImpl.class);
+    @Override
+    @PostConstruct
+    public void initialize() {
+        updateSubscriptionDates(); // Run the update method once on startup
+    }
+    @Override
+    @Scheduled(cron = "0 0 0 * * *") // Run daily at midnight
+    public void updateSubscriptionDates() {
+        List<Subscription> subscriptions = subscriptionRepository.findAll();
+        LocalDate today = LocalDate.now();
+        for (Subscription subscription : subscriptions) {
+            if (subscription.getLastOccurrenceDate() != null){
+                processSubscription(subscription, today);
+            }
+        }
+    }
+
     @Override
     public List<SubscriptionDTO> fetchAllSubscriptions() {
         return subscriptionRepository.findAll().stream().map(subscription -> mapper.toDto(subscription)).collect(Collectors.toList());
@@ -79,42 +100,28 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         Subscription temp = subscriptionRepository.findById(id).orElseThrow();
         subscriptionRepository.deleteById(id);
     }
-
     @Override
-    @PostConstruct
-    public void initialize() {
-        updateSubscriptionDates(); // Run the update method once on startup
-    }
-    @Override
-    @Scheduled(cron = "0 0 0 * * *") // Run daily at midnight
-    public void updateSubscriptionDates() {
-        List<Subscription> subscriptions = subscriptionRepository.findAll();
-        LocalDate today = LocalDate.now();
-
-        for (Subscription subscription : subscriptions) {
-            if (subscription.getLastOccurrenceDate() != null){
-                processSubscription(subscription, today);
-            }
-        }
-    }
-
-    @Override
-    public List<SubscriptionDTO> getAllSubscriptionsForCurrentUser() {
-        return mapper.toDtos(subscriptionRepository.findAllByUser(userService.getCurrentUser()));
+    public List<Subscription> getAllSubscriptionsForCurrentUser() {
+        return subscriptionRepository.findAllByUser(userService.getCurrentUser());
     }
 
     private void processSubscription(Subscription subscription, LocalDate today) {
-        LocalDate lastOccurrence = subscription.getLastOccurrenceDate();
-        LocalDate newLast = subscription.getNextOccurrenceDate();
-        LocalDate start = lastOccurrence;
-        while (start.isBefore(today) || start.isEqual(today) ) {
-            handleTransactionCreation(subscription, start);
-            newLast = start;
-            start = subscription.calculateNextOccurrenceDate(start);
+        LocalDate lastOccurrenceDate = subscription.getLastOccurrenceDate();
+        LocalDate nextOccurrenceDate = subscription.getNextOccurrenceDate();
+        while (nextOccurrenceDate.isBefore(today) || nextOccurrenceDate.isEqual(today)) {
+            handleTransactionCreation(subscription, lastOccurrenceDate);
+            if(Objects.nonNull(subscription.getEndDate()) &&
+                    nextOccurrenceDate.isEqual(subscription.getEndDate())) {
+                lastOccurrenceDate = nextOccurrenceDate;
+                break;
+            }
+            lastOccurrenceDate = nextOccurrenceDate;
+            nextOccurrenceDate = subscription.calculateNextOccurrenceDate(lastOccurrenceDate);
+
         }
 
-        subscription.setLastOccurrenceDate(newLast);
-        subscription.setNextOccurrenceDate(subscription.calculateNextOccurrenceDate(newLast));
+        subscription.setLastOccurrenceDate(lastOccurrenceDate);
+        subscription.setNextOccurrenceDate(nextOccurrenceDate);
         subscriptionRepository.save(subscription);
     }
 
@@ -122,7 +129,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         List<Transaction> timestamps = transactionRepository
                 .findAllByTimestampBetweenAndSubscription(
                         date.atStartOfDay(),
-                        date.plusDays(1).atStartOfDay(),
+                        date.plusDays(1).atStartOfDay().minusNanos(1),
                         subscription
                 );
 
