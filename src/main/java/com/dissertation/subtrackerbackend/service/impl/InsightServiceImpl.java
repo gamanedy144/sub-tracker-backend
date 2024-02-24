@@ -151,24 +151,35 @@ public class InsightServiceImpl implements InsightService {
         int currentYear = currentDate.getYear();
         int currentMonth = currentDate.getMonthValue();
         int nextMonth = currentMonth % 12 + 1;
-        int nextYear = currentMonth == 12 ? currentYear + 1 : currentYear;
+        int nextYear = currentYear + 1;
 
         Map<String, Double> monthlySpendingMap = new HashMap<>();
 
         for (Subscription subscription : subscriptions) {
             double subscriptionCost = subscription.getPrice();
-            if (Objects.nonNull(subscription.getNextOccurrenceDate())) {
-                LocalDate startDate = subscription.getNextOccurrenceDate();
-                while (subscription.getNextOccurrenceDate().getMonthValue() < nextMonth && subscription.getNextOccurrenceDate().getYear() < nextYear) {
-                    startDate = subscription.calculateNextOccurrenceDate(startDate);
+
+            LocalDate startDate = subscription.getNextOccurrenceDate();
+            while (startDate.getMonthValue() < nextMonth &&
+                    startDate.getYear() < nextYear) {
+                if (Objects.nonNull(subscription.getEndDate()) && startDate.isEqual(subscription.getEndDate())){
+                    break;
                 }
-                while (startDate.getMonthValue() >= nextMonth && startDate.getYear() <= nextYear) {
-                    String month = String.format("%02d", startDate.getMonthValue()); // Format month as two-digit string
-                    String monthYearKey = month + "-" + startDate.getYear();
-                    monthlySpendingMap.put(monthYearKey, monthlySpendingMap.getOrDefault(monthYearKey, 0.0) + subscriptionCost);
-                    startDate = subscription.calculateNextOccurrenceDate(startDate);
-                }
+                startDate = subscription.calculateNextOccurrenceDate(startDate);
             }
+            if (Objects.nonNull(subscription.getEndDate()) && startDate.isEqual(subscription.getEndDate())){
+                continue;
+            }
+            while ((startDate.getMonthValue() >= nextMonth && startDate.getYear() < nextYear) ||
+                    (startDate.getMonthValue() < nextMonth && startDate.getYear() == nextYear)) {
+                String month = String.format("%02d", startDate.getMonthValue()); // Format month as two-digit string
+                String monthYearKey = startDate.getYear() + "-" + month;
+                monthlySpendingMap.put(monthYearKey, monthlySpendingMap.getOrDefault(monthYearKey, 0.0) + subscriptionCost);
+                if (Objects.nonNull(subscription.getEndDate()) && startDate.isEqual(subscription.getEndDate())){
+                    break;
+                }
+                startDate = subscription.calculateNextOccurrenceDate(startDate);
+            }
+
 //            if (Objects.nonNull(subscription.getLastOccurrenceDate())) {
 //                    startDate = subscription.getLastOccurrenceDate();
 //            }
