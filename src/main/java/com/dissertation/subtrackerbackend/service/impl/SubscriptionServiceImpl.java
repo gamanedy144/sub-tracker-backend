@@ -3,7 +3,6 @@ package com.dissertation.subtrackerbackend.service.impl;
 import com.dissertation.subtrackerbackend.config.JwtService;
 import com.dissertation.subtrackerbackend.domain.Subscription;
 import com.dissertation.subtrackerbackend.domain.TransactionStatus;
-import com.dissertation.subtrackerbackend.domain.User;
 import com.dissertation.subtrackerbackend.domain.Transaction;
 import com.dissertation.subtrackerbackend.domain.dto.SubscriptionDTO;
 import com.dissertation.subtrackerbackend.domain.mapper.SubscriptionMapper;
@@ -19,7 +18,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -44,7 +42,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         List<Subscription> subscriptions = subscriptionRepository.findAll();
         LocalDate today = LocalDate.now();
         for (Subscription subscription : subscriptions) {
-            if (subscription.getLastOccurrenceDate() != null){
+            if (subscription.getLastOccurrenceDate() != null && subscription.isActive()){
                 processSubscription(subscription, today);
             }
         }
@@ -57,7 +55,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 
     @Override
     public List<SubscriptionDTO> fetchAllSubscriptionsForCurrentUser() {
-        return subscriptionRepository.findAllByUser(userService.getCurrentUser()).stream()
+        return subscriptionRepository.findAllByUserAndActiveTrue(userService.getCurrentUser()).stream()
                 .map(subscription -> mapper.toDto(subscription)).collect(Collectors.toList());
     }
     @Override
@@ -88,12 +86,12 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         return subscriptionRepository.save(subscriptionToBeSaved);
     }
 
-//    @Override
-//    public Subscription softDelete(long id) {
-//        Subscription sub = subscriptionRepository.findById(id).orElseThrow();
-//        sub.setActive(false);
-//        return subscriptionRepository.save(sub);
-//    }
+    @Override
+    public Subscription softDelete(long id) {
+        Subscription sub = subscriptionRepository.findById(id).orElseThrow();
+        sub.setActive(false);
+        return subscriptionRepository.save(sub);
+    }
 
     @Override
     public void delete(long id) {
@@ -102,7 +100,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     }
     @Override
     public List<Subscription> getAllSubscriptionsForCurrentUser() {
-        return subscriptionRepository.findAllByUser(userService.getCurrentUser());
+        return subscriptionRepository.findAllByUserAndActiveTrue(userService.getCurrentUser());
     }
 
     private void processSubscription(Subscription subscription, LocalDate today) {
@@ -145,6 +143,6 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 
     @Override
     public Integer countSubscriptionsForCurrentUser() {
-        return subscriptionRepository.countAllByUser(userService.getCurrentUser());
+        return subscriptionRepository.countAllByUserAndActiveTrue(userService.getCurrentUser());
     }
 }

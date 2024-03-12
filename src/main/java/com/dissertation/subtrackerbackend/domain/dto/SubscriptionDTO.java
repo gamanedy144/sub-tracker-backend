@@ -1,9 +1,6 @@
 package com.dissertation.subtrackerbackend.domain.dto;
 
-import com.dissertation.subtrackerbackend.domain.SubscriptionCategory;
-import com.dissertation.subtrackerbackend.domain.SubscriptionProvider;
-import com.dissertation.subtrackerbackend.domain.SubscriptionTypeEnum;
-import com.dissertation.subtrackerbackend.domain.User;
+import com.dissertation.subtrackerbackend.domain.*;
 import com.fasterxml.jackson.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,4 +27,5 @@ public class SubscriptionDTO implements Serializable {
         private LocalDate lastOccurrenceDate;
         private Float price;
         private SubscriptionCategory category;
+        private boolean active;
 }

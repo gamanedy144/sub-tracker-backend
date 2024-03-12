@@ -65,6 +65,9 @@ public class Subscription {
     @Enumerated(EnumType.STRING)
     private SubscriptionCategory category;
 
+    @Column
+    private boolean active;
+
     public LocalDate calculateNextOccurrenceDate(LocalDate date) {
         LocalDate nextOccurrenceDate =  type.label.equals("yearly") ? date.plusYears(1)
                 : type.label.equals("monthly") ? date.plusMonths(1)

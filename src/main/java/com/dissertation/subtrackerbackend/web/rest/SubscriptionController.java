@@ -37,9 +37,9 @@ public class SubscriptionController {
     public ResponseEntity<Subscription> updateSubscription(@RequestBody SubscriptionDTO subscriptionDTO){
         return ResponseEntity.ok(subscriptionService.updateSubscription(subscriptionDTO));
     }
-    @DeleteMapping("/delete/{id}")
-    public void deleteSubscription(@PathVariable long id){
-        subscriptionService.delete(id);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Subscription> deleteSubscription(@PathVariable long id){
+        return ResponseEntity.ok(subscriptionService.softDelete(id));
     }
 
     @GetMapping("/count")

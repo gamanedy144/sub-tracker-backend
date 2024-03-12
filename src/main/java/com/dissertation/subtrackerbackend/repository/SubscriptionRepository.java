@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface SubscriptionRepository extends JpaRepository<Subscription, Long> {
 
-    List<Subscription> findAllByUser(User user);
+    List<Subscription> findAllByUserAndActiveTrue(User user);
 
-    Integer countAllByUser(User user);
+    Integer countAllByUserAndActiveTrue(User user);
 }

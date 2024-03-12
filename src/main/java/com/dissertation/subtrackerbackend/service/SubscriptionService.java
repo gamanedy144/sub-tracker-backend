@@ -21,6 +21,8 @@ public interface SubscriptionService {
 
 //    Subscription softDelete(long id);
 
+    Subscription softDelete(long id);
+
     void delete(long id);
 
     @PostConstruct
