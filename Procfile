@@ -1,1 +1,1 @@
-web: java -jar build/libs/sub-tracker-backend-1.0.0-SNAPSHOT.jar
+web: java -jar build/libs/sub-tracker-backend-0.0.1-SNAPSHOT.jar --spring.profiles.active=deploy
