@@ -58,7 +58,8 @@ public class SecurityConfig {
             public void addCorsMappings(@NonNull CorsRegistry registry) {
                 registry.addMapping("/**")
                         .allowedOrigins("http://localhost:5173")
-                        .allowedOriginPatterns("https://sub-tracker-frontend-.*")
+//                        .allowedOrigins("https://sub-tracker-frontend-l4pbvb5di-gamanedy144s-projects.vercel.app")
+                        .allowedOriginPatterns("https://sub-tracker-frontend-*-gamanedy144s-projects.vercel.app")
                         .allowedMethods("GET", "POST","PUT", "DELETE", "PATCH")
                         .allowedHeaders("*")
                         .allowCredentials(true);
